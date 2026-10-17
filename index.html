@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl" class="index-page">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="ChemicalLab - interaktywne symulacje chemiczne.">
+    <title>ChemicalLab</title>
+    <link rel="stylesheet" href="vendor/github-markdown.min.css">
+    <style>
+      .index-page body { margin: 0; background: #fff; }
+      @media (prefers-color-scheme: dark) { .index-page body { background: #0d1117; } }
+      .index-page .page { box-sizing: border-box; max-width: 980px; margin: 0 auto; padding: 45px; }
+      @media (max-width: 767px) { .index-page .page { padding: 15px; } }
+    </style>
+  </head>
+  <body>
+    <main class="page markdown-body">
+      <div id="readme">Ładowanie…</div>
+      <section id="simulations" hidden>
+        <h2>Symulacje</h2>
+        <ul id="simulationIndex"></ul>
+      </section>
+    </main>
+    <script src="vendor/marked.min.js"></script>
+    <script>
+      const slug = text => text.trim().toLowerCase().replace(/\s+/g, '-');
+
+      async function load(url, type) {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`${url}: ${response.status}`);
+        return type === 'json' ? response.json() : response.text();
+      }
+
+      function renderSimulations(items) {
+        const list = document.getElementById('simulationIndex');
+        list.replaceChildren(...items.map(item => {
+          const li = document.createElement('li');
+          if (item.status === 'published' && item.url) {
+            const a = document.createElement('a');
+            a.href = item.url;
+            a.textContent = item.title;
+            li.append(a);
+            if (item.description) li.append(' - ' + item.description);
+          } else {
+            li.append(item.title + ' (planowane)');
+          }
+          return li;
+        }));
+        document.getElementById('simulations').hidden = false;
+      }
+
+      (async () => {
+        const readme = document.getElementById('readme');
+        try {
+          readme.innerHTML = marked.parse(await load('README.md', 'text'));
+          // marked does not add heading ids, which the README language badges rely on.
+          readme.querySelectorAll('h1, h2, h3').forEach(h => { h.id = slug(h.textContent); });
+        } catch (error) {
+          readme.textContent = 'Nie udało się wczytać README.md. Otwórz stronę przez serwer HTTP lub GitHub Pages.';
+          console.error(error);
+        }
+        try {
+          renderSimulations(await load('simulations.json', 'json'));
+        } catch (error) {
+          console.error(error);
+        }
+      })();
+    </script>
+  </body>
+</html>

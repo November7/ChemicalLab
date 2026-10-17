@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#163a38">
+<title>Atom po atomie — interaktywne laboratorium</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header><div class="header-inner"><div class="brand-mark" aria-hidden="true">⚛</div><div class="brand">atom po atomie <span>/ laboratorium</span></div><div class="offline">Działa offline</div></div></header>
+<main>
+<section class="intro"><div><div class="eyebrow">Odkrywaj • łącz • zrozum</div><h1>Wielka chemia. Małe atomy.</h1><p class="muted">Wybierz pierwiastki z układu okresowego i zbuduj swoją pierwszą substancję.</p></div><div class="mode-switch" aria-label="Tryb pracy"><button id="task-mode" aria-pressed="true">Wyzwania</button><button id="free-mode" aria-pressed="false">Swobodne budowanie</button></div></section>
+<div class="lab">
+<aside class="card lessons"><div class="section-top"><h2 id="list-heading">Twoje wyzwania</h2><span class="count-badge" id="progress-label"></span></div><div class="progress"><span id="progress-bar"></span></div><p class="free-info" id="free-info" hidden>Eksperymentuj ze składem. Program rozpoznaje substancje z poniższej biblioteki. Kliknij nazwę, aby przejść do zadania.</p><nav class="lesson-list" id="lesson-list" aria-label="Dostępne substancje"></nav><div class="lesson-info">01 &nbsp; Wybierz substancję<br>02 &nbsp; Przenieś odpowiednie atomy<br>03 &nbsp; Odkryj jej model i wzór</div></aside>
+<section class="card workbench" aria-label="Obszar projektu"><div class="bench-top"><div><div class="bench-label">Obszar projektu</div><div class="bench-title" id="bench-title"></div></div><button class="hint-button" id="hint" aria-pressed="true">◉ Podpowiedź</button></div><div class="recipe" id="recipe"></div><div class="stage" id="stage" aria-label="Przeciągnij tutaj atomy"></div><div class="bench-bottom"><div class="composition" id="composition"></div><button class="tool" id="undo" title="Cofnij ostatnią zmianę">↶ Cofnij</button><button class="tool" id="clear">Wyczyść</button></div><p id="notice" class="notice" role="status" aria-live="polite"></p></section>
+</div>
+<section class="card table-card"><div class="table-heading"><div><h2>Twój zestaw pierwiastków</h2><p>Przeciągnij kafelek do projektu lub kliknij, aby dodać atom. Na telefonie dotknij kafelka.</p></div><div class="table-actions"><label class="toggle"><input id="highlight" type="checkbox" checked> Wyróżnij przydatne</label><input class="search" id="search" type="search" placeholder="Szukaj: nazwa lub symbol" aria-label="Szukaj pierwiastka"></div></div><div class="periodic-scroll"><div class="periodic" id="periodic" aria-label="Układ okresowy pierwiastków"></div></div><div class="legend"><span><i style="--color:#dceee4"></i>Niemetale</span><span><i style="--color:#f4e5b9"></i>Metale bloku s</span><span><i style="--color:#e2eaf5"></i>Metale przejściowe</span><span><i style="--color:#e9e3f4"></i>Pozostałe metale</span><span><i style="--color:#f5ddd3"></i>Półmetale</span><span><i style="--color:#dceff2"></i>Gazy szlachetne</span><span><i style="--color:#f0e4df"></i>Blok f</span></div><p class="help">Usuwanie: kliknij „×” przy symbolu pod projektem lub dwukrotnie kliknij atom. Z klawiatury: Tab → Enter dodaje, Delete usuwa zaznaczony atom. Układ okresowy można przewijać poziomo.</p></section>
+<footer><p>Model edukacyjny: dobierasz skład substancji, nie przeprowadzasz reakcji chemicznej. Rysunki Lewisa są schematami 2D. Podane kąty opisują geometrię przestrzenną; wartości idealne VSEPR są wyraźnie oznaczone. Modele kwasów pokazują cząsteczki przed dysocjacją.</p><span>118 pierwiastków · <span id="library-count"></span> substancji</span></footer>
+<details class="source-notes"><summary>O modelach i źródłach danych</summary><p>Wolne pary i ładunki opisano konwencją Lewisa. Wiązanie podwójne liczy się jako jeden obszar elektronowy w modelu VSEPR. Kąty oznaczone jako idealne nie są wynikami pomiarów. W cząsteczkach złożonych pokazano wybrane kąty. Rozmieszczenie kropek służy czytelności i nie przedstawia orbitali w przestrzeni.</p><p>Źródła: <a href="https://openstax.org/books/chemistry-2e/pages/7-6-molecular-structure-and-polarity" target="_blank" rel="noopener noreferrer">OpenStax — geometria i VSEPR</a>; <a href="https://openstax.org/books/chemistry-2e/pages/7-4-formal-charges-and-resonance" target="_blank" rel="noopener noreferrer">OpenStax — ładunki i rezonans</a>; <a href="https://physics.nist.gov/PhysRefData/MolSpec/Triatomic/Html/appendix.html" target="_blank" rel="noopener noreferrer">NIST — geometria cząsteczek trójatomowych</a>; <a href="https://cccbdb.nist.gov/exp2x.asp?casno=7722841&amp;charge=0" target="_blank" rel="noopener noreferrer">NIST — H₂O₂</a>; <a href="https://www.chem.ucla.edu/~harding/IGOC/P/phosphoric_acid.html" target="_blank" rel="noopener noreferrer">UCLA — kwas fosforowy</a>. Linki są opcjonalne; aplikacja działa bez internetu.</p></details></main><div id="drag-ghost" aria-hidden="true"></div>
+<!-- BIBLIOTEKA SUBSTANCJI — edytuj tę listę jako poprawny JSON (bez komentarzy wewnątrz).
+     wzor: zapis zwykłymi cyframi, zamienianymi w interfejsie na indeksy dolne.
+     atomy: symbol i wymagana liczba atomów. model: [symbol, x, y] na płótnie 600 × 360 (renderer dodaje 35 px marginesu od góry).
+     wiazania: [indeks atomu od 0, indeks atomu od 0, krotność].
+     typ "jonowy": wycinek sieci z polem jony; model podaje proporcję składu, nie cząsteczkę.
+     wolnePary: indeks atomu → kierunki par w stopniach na ekranie (0 w prawo, 90 w dół).
+     Każdy kierunek oznacza jedną parę, czyli dwie kropki. Brak wpisu oznacza zero par.
+     ladunki: indeks atomu → liczbowy ładunek formalny, np. {"0": 1, "2": -1}.
+     katy: atomy [A, środkowy B, C], stopnie, opis, etykieta [x,y], rodzaj wartości.
+     Kąty są danymi chemicznymi, a nie pomiarami płaskiego rysunku.
+     wolneParyJonow: symbol anionu → kierunki czterech par jego oktetu.
+     Dodanie pozycji automatycznie dodaje zadanie i regułę rozpoznawania.
+-->
+<script id="substances-data" type="application/json">
+[
+  {
+    "id": "woda",
+    "nazwa": "Woda",
+    "opis": "Buduje krople, oceany i żywe organizmy. Jej cząsteczka zawiera dwa atomy wodoru i jeden atom tlenu.",
+    "wzor": "H2O",
+    "atomy": {
+      "H": 2,
+      "O": 1
+    },
+    "typ": "czasteczka",
+    "model": [
+      [
+        "O",
+        300,
+        100
+      ],
+      [
+        "H",
+        205,
+        173.6
+      ],
+      [
+        "H",
+        395,
+        173.6
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        2,
+        1
+      ]
+    ],
+    "ladunki": {},
+    "katy": [
+      {
+        "atomy": [
+          1,
+          0,
+          2
+        ],
+        "stopnie": 104.5,
+        "opis": "H–O–H",
+        "etykieta": [
+          300,
+          180
+        ],
+        "rodzaj": "przybliżony"
+      }
+    ],
+    "geometria": "Budowa kątowa. Dwie wolne pary przy tlenie wpływają na kąt H–O–H.",
+    "wolnePary": {
+      "0": [
+        225,
+        315
+      ]
+    }
+  },
+  {
+    "id": "sol",
+    "nazwa": "Sól kuchenna",
+    "opis": "Chlorek sodu tworzy sieć krystaliczną z jonów Na⁺ i Cl⁻. NaCl oznacza proporcję 1:1, a nie osobną cząsteczkę. Pokazano uproszczony fragment sieci.",
+    "wzor": "NaCl",
+    "atomy": {
+      "Na": 1,
+      "Cl": 1
+    },
+    "typ": "jonowy",
+    "jony": {
+      "Na": "+",
+      "Cl": "−"
+    },
+    "model": [
+      [
+        "Na",
+        250,
+        130
+      ],
+      [
+        "Cl",
+        350,
+        130
+      ]
+    ],
+    "wiazania": [],
+    "ladunki": {},
+    "katy": [],
+    "geometria": "Fragment sieci jonowej, nie cząsteczka. Nie zaznaczamy kątów wiązań cząsteczkowych. Kropki przy anionach przedstawiają ich oktet; wewnętrznych elektronów kationów nie pokazano.",
+    "wolnePary": {},
+    "wolneParyJonow": {
+      "Cl": [
+        0,
+        90,
+        180,
+        270
+      ]
+    }
+  },
+  {
+    "id": "co2",
+    "nazwa": "Dwutlenek węgla",
+    "opis": "Gaz obecny m.in. w wydychanym powietrzu. Cząsteczka jest liniowa: atom węgla łączy się z dwoma atomami tlenu wiązaniami podwójnymi.",
+    "wzor": "CO2",
+    "atomy": {
+      "C": 1,
+      "O": 2
+    },
+    "typ": "czasteczka",
+    "model": [
+      [
+        "O",
+        185,
+        132
+      ],
+      [
+        "C",
+        300,
+        132
+      ],
+      [
+        "O",
+        415,
+        132
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        1,
+        2,
+        2
+      ]
+    ],
+    "ladunki": {},
+    "katy": [
+      {
+        "atomy": [
+          0,
+          1,
+          2
+        ],
+        "stopnie": 180,
+        "opis": "O–C–O",
+        "etykieta": [
+          300,
+          63
+        ],
+        "rodzaj": "dokładny (symetria)"
+      }
+    ],
+    "geometria": "Budowa liniowa. Przy węglu nie ma wolnych par; każdy tlen ma dwie.",
+    "wolnePary": {
+      "0": [
+        135,
+        225
+      ],
+      "2": [
+        315,
+        45
+      ]
+    }
+  },
+  {
+    "id": "amoniak",
+    "nazwa": "Amoniak",
+    "opis": "Jeden atom azotu łączy się z trzema atomami wodoru. W przestrzeni cząsteczka ma kształt piramidy trygonalnej; tutaj widzisz schemat płaski.",
+    "wzor": "NH3",
+    "atomy": {
+      "N": 1,
+      "H": 3
+    },
+    "typ": "czasteczka",
+    "model": [
+      [
+        "N",
+        300,
+        110
+      ],
+      [
+        "H",
+        207,
+        160
+      ],
+      [
+        "H",
+        300,
+        207
+      ],
+      [
+        "H",
+        393,
+        160
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        3,
+        1
+      ]
+    ],
+    "ladunki": {},
+    "katy": [
+      {
+        "atomy": [
+          1,
+          0,
+          2
+        ],
+        "stopnie": 107,
+        "opis": "H–N–H",
+        "etykieta": [
+          237,
+          211
+        ],
+        "rodzaj": "przybliżony"
+      }
+    ],
+    "geometria": "Piramida trygonalna. Jedna wolna para przy azocie; kąt przestrzenny ≈107°. Płaski schemat nie odwzorowuje tego kąta w skali.",
+    "wolnePary": {
+      "0": [
+        270
+      ]
+    }
+  },
+  {
+    "id": "metan",
+    "nazwa": "Metan",
+    "opis": "Główny składnik gazu ziemnego. Atom węgla tworzy cztery wiązania z wodorem. Rzeczywista cząsteczka ma budowę tetraedryczną; rysunek jest schematem płaskim.",
+    "wzor": "CH4",
+    "atomy": {
+      "C": 1,
+      "H": 4
+    },
+    "typ": "czasteczka",
+    "model": [
+      [
+        "C",
+        300,
+        132
+      ],
+      [
+        "H",
+        300,
+        43
+      ],
+      [
+        "H",
+        200,
+        132
+      ],
+      [
+        "H",
+        400,
+        132
+      ],
+      [
+        "H",
+        300,
+        222
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        3,
+        1
+      ],
+      [
+        0,
+        4,
+        1
+      ]
+    ],
+    "ladunki": {},
+    "katy": [
+      {
+        "atomy": [
+          1,
+          0,
+          2
+        ],
+        "stopnie": 109.5,
+        "opis": "H–C–H",
+        "etykieta": [
+          232,
+          73
+        ],
+        "rodzaj": "idealny VSEPR"
+      }
+    ],
+    "geometria": "Tetraedr. Cztery wiązania i brak wolnych par przy węglu. Podana wartość jest kątem przestrzennym, nie kątem na płaskim rysunku.",
+    "wolnePary": {}
+  },
+  {
+    "id": "hcl",
+    "nazwa": "Chlorowodór / kwas solny",
+    "opis": "HCl to chlorowodór; kwas solny jest jego wodnym roztworem. Pokazano cząsteczkę HCl przed rozpuszczeniem. W wodzie powstają przede wszystkim jony H₃O⁺ i Cl⁻.",
+    "wzor": "HCl",
+    "atomy": {
+      "H": 1,
+      "Cl": 1
+    },
+    "typ": "czasteczka",
+    "model": [
+      [
+        "H",
+        245,
+        132
+      ],
+      [
+        "Cl",
+        355,
+        132
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        1
+      ]
+    ],
+    "ladunki": {},
+    "katy": [],
+    "geometria": "Cząsteczka dwuatomowa: tylko jedno wiązanie, więc kąt między wiązaniami nie jest określony. Chlor ma trzy wolne pary.",
+    "grupa": "kwasy",
+    "wolnePary": {
+      "1": [
+        270,
+        0,
+        90
+      ]
+    }
+  },
+  {
+    "id": "nadtlenek",
+    "nazwa": "Nadtlenek wodoru",
+    "opis": "Zawiera dwa atomy tlenu połączone ze sobą, a każdy z nich łączy się z wodorem. Jego rozcieńczony roztwór to woda utleniona.",
+    "wzor": "H2O2",
+    "atomy": {
+      "H": 2,
+      "O": 2
+    },
+    "typ": "czasteczka",
+    "model": [
+      [
+        "H",
+        170,
+        177
+      ],
+      [
+        "O",
+        255,
+        113
+      ],
+      [
+        "O",
+        345,
+        113
+      ],
+      [
+        "H",
+        430,
+        177
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        1,
+        2,
+        1
+      ],
+      [
+        2,
+        3,
+        1
+      ]
+    ],
+    "ladunki": {},
+    "katy": [
+      {
+        "atomy": [
+          0,
+          1,
+          2
+        ],
+        "stopnie": 94.8,
+        "opis": "H–O–O",
+        "etykieta": [
+          266,
+          187
+        ],
+        "rodzaj": "przybliżony"
+      },
+      {
+        "atomy": [
+          1,
+          2,
+          3
+        ],
+        "stopnie": 94.8,
+        "opis": "O–O–H",
+        "etykieta": [
+          378,
+          187
+        ],
+        "rodzaj": "przybliżony"
+      }
+    ],
+    "geometria": "Cząsteczka nie jest płaska. Przy każdym tlenie są dwie wolne pary. Podano przybliżone kąty H–O–O w fazie gazowej (dane NIST).",
+    "wolnePary": {
+      "1": [
+        215,
+        285
+      ],
+      "2": [
+        255,
+        325
+      ]
+    }
+  },
+  {
+    "id": "siarkowodor",
+    "nazwa": "Siarkowodór",
+    "opis": "Dwa atomy wodoru i jeden atom siarki tworzą kątową cząsteczkę H₂S. To toksyczny gaz, znany z zapachu zgniłych jaj.",
+    "wzor": "H2S",
+    "atomy": {
+      "H": 2,
+      "S": 1
+    },
+    "typ": "czasteczka",
+    "model": [
+      [
+        "S",
+        300,
+        105
+      ],
+      [
+        "H",
+        220,
+        175
+      ],
+      [
+        "H",
+        380,
+        175
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        2,
+        1
+      ]
+    ],
+    "ladunki": {},
+    "katy": [
+      {
+        "atomy": [
+          1,
+          0,
+          2
+        ],
+        "stopnie": 92.1,
+        "opis": "H–S–H",
+        "etykieta": [
+          300,
+          184
+        ],
+        "rodzaj": "przybliżony"
+      }
+    ],
+    "geometria": "Budowa kątowa. Siarka ma dwie wolne pary. Kąt H–S–H w fazie gazowej wynosi około 92,1°.",
+    "wolnePary": {
+      "0": [
+        225,
+        315
+      ]
+    }
+  },
+  {
+    "id": "mgo",
+    "nazwa": "Tlenek magnezu",
+    "opis": "Związek jonowy zbudowany z jonów Mg²⁺ i O²⁻ w proporcji 1:1. Wzór opisuje skład sieci krystalicznej. Pokazano jej uproszczony fragment.",
+    "wzor": "MgO",
+    "atomy": {
+      "Mg": 1,
+      "O": 1
+    },
+    "typ": "jonowy",
+    "jony": {
+      "Mg": "2+",
+      "O": "2−"
+    },
+    "model": [
+      [
+        "Mg",
+        250,
+        130
+      ],
+      [
+        "O",
+        350,
+        130
+      ]
+    ],
+    "wiazania": [],
+    "ladunki": {},
+    "katy": [],
+    "geometria": "Fragment sieci jonowej, nie cząsteczka. Nie zaznaczamy kątów wiązań cząsteczkowych. Kropki przy anionach przedstawiają ich oktet; wewnętrznych elektronów kationów nie pokazano.",
+    "wolnePary": {},
+    "wolneParyJonow": {
+      "O": [
+        0,
+        90,
+        180,
+        270
+      ]
+    }
+  },
+  {
+    "id": "cao",
+    "nazwa": "Tlenek wapnia",
+    "opis": "Znany jako wapno palone. Tworzy sieć krystaliczną jonów Ca²⁺ i O²⁻ w proporcji 1:1. Pokazano uproszczony fragment sieci, a nie cząsteczkę.",
+    "wzor": "CaO",
+    "atomy": {
+      "Ca": 1,
+      "O": 1
+    },
+    "typ": "jonowy",
+    "jony": {
+      "Ca": "2+",
+      "O": "2−"
+    },
+    "model": [
+      [
+        "Ca",
+        250,
+        130
+      ],
+      [
+        "O",
+        350,
+        130
+      ]
+    ],
+    "wiazania": [],
+    "ladunki": {},
+    "katy": [],
+    "geometria": "Fragment sieci jonowej, nie cząsteczka. Nie zaznaczamy kątów wiązań cząsteczkowych. Kropki przy anionach przedstawiają ich oktet; wewnętrznych elektronów kationów nie pokazano.",
+    "wolnePary": {},
+    "wolneParyJonow": {
+      "O": [
+        0,
+        90,
+        180,
+        270
+      ]
+    }
+  },
+  {
+    "id": "etan",
+    "nazwa": "Etan",
+    "opis": "Dwa atomy węgla łączy pojedyncze wiązanie. Każdy atom węgla łączy się też z trzema atomami wodoru.",
+    "wzor": "C2H6",
+    "atomy": {
+      "C": 2,
+      "H": 6
+    },
+    "typ": "czasteczka",
+    "model": [
+      [
+        "C",
+        250,
+        132
+      ],
+      [
+        "C",
+        350,
+        132
+      ],
+      [
+        "H",
+        160,
+        132
+      ],
+      [
+        "H",
+        250,
+        48
+      ],
+      [
+        "H",
+        250,
+        216
+      ],
+      [
+        "H",
+        440,
+        132
+      ],
+      [
+        "H",
+        350,
+        48
+      ],
+      [
+        "H",
+        350,
+        216
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        3,
+        1
+      ],
+      [
+        0,
+        4,
+        1
+      ],
+      [
+        1,
+        5,
+        1
+      ],
+      [
+        1,
+        6,
+        1
+      ],
+      [
+        1,
+        7,
+        1
+      ]
+    ],
+    "ladunki": {},
+    "katy": [
+      {
+        "atomy": [
+          2,
+          0,
+          3
+        ],
+        "stopnie": 109.5,
+        "opis": "H–C–H",
+        "etykieta": [
+          184,
+          67
+        ],
+        "rodzaj": "idealny VSEPR"
+      }
+    ],
+    "geometria": "Wokół każdego węgla: układ zbliżony do tetraedrycznego. 109,5° to wartość idealna VSEPR; rzeczywiste kąty mogą się nieco różnić.",
+    "wolnePary": {}
+  },
+  {
+    "id": "etanol",
+    "nazwa": "Etanol",
+    "opis": "Model alkoholu etylowego ma grupę –OH połączoną z dwoma atomami węgla. Ten sam wzór sumaryczny może opisywać również inne struktury; tutaj przyjęto model etanolu.",
+    "wzor": "C2H6O",
+    "atomy": {
+      "C": 2,
+      "H": 6,
+      "O": 1
+    },
+    "typ": "czasteczka",
+    "model": [
+      [
+        "C",
+        195,
+        132
+      ],
+      [
+        "C",
+        295,
+        132
+      ],
+      [
+        "O",
+        395,
+        132
+      ],
+      [
+        "H",
+        107,
+        132
+      ],
+      [
+        "H",
+        195,
+        48
+      ],
+      [
+        "H",
+        195,
+        216
+      ],
+      [
+        "H",
+        295,
+        48
+      ],
+      [
+        "H",
+        295,
+        216
+      ],
+      [
+        "H",
+        472,
+        190
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        1,
+        2,
+        1
+      ],
+      [
+        0,
+        3,
+        1
+      ],
+      [
+        0,
+        4,
+        1
+      ],
+      [
+        0,
+        5,
+        1
+      ],
+      [
+        1,
+        6,
+        1
+      ],
+      [
+        1,
+        7,
+        1
+      ],
+      [
+        2,
+        8,
+        1
+      ]
+    ],
+    "ladunki": {},
+    "katy": [
+      {
+        "atomy": [
+          3,
+          0,
+          4
+        ],
+        "stopnie": 109.5,
+        "opis": "H–C–H",
+        "etykieta": [
+          128,
+          65
+        ],
+        "rodzaj": "idealny VSEPR"
+      }
+    ],
+    "geometria": "Wokół atomów węgla: układ zbliżony do tetraedrycznego. W grupie –OH tlen ma dwie wolne pary. Oznaczono wybrany kąt przy węglu.",
+    "wolnePary": {
+      "2": [
+        270,
+        15
+      ]
+    }
+  },
+  {
+    "id": "kwas-siarkowy",
+    "nazwa": "Kwas siarkowy(VI)",
+    "opis": "Popularny kwas mineralny. Wodory są przyłączone do atomów tlenu. Przedstawiono umowny wzór Lewisa z dwoma wiązaniami S=O i rozszerzonym oktetem siarki; nie jest to pełny opis rozkładu elektronów.",
+    "wzor": "H2SO4",
+    "atomy": {
+      "H": 2,
+      "S": 1,
+      "O": 4
+    },
+    "typ": "czasteczka",
+    "grupa": "kwasy",
+    "model": [
+      [
+        "S",
+        300,
+        130
+      ],
+      [
+        "O",
+        225,
+        42
+      ],
+      [
+        "O",
+        375,
+        42
+      ],
+      [
+        "O",
+        195,
+        210
+      ],
+      [
+        "O",
+        405,
+        210
+      ],
+      [
+        "H",
+        105,
+        210
+      ],
+      [
+        "H",
+        495,
+        210
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        3,
+        1
+      ],
+      [
+        0,
+        4,
+        1
+      ],
+      [
+        3,
+        5,
+        1
+      ],
+      [
+        4,
+        6,
+        1
+      ]
+    ],
+    "ladunki": {},
+    "katy": [
+      {
+        "atomy": [
+          3,
+          0,
+          4
+        ],
+        "stopnie": 109.5,
+        "opis": "O–S–O",
+        "etykieta": [
+          300,
+          223
+        ],
+        "rodzaj": "idealny VSEPR"
+      }
+    ],
+    "geometria": "Otoczenie siarki jest w przybliżeniu tetraedryczne. 109,5° to kąt idealnego tetraedru, a nie wynik pomiaru wszystkich kątów O–S–O.",
+    "wolnePary": {
+      "1": [
+        180,
+        270
+      ],
+      "2": [
+        270,
+        0
+      ],
+      "3": [
+        90,
+        225
+      ],
+      "4": [
+        90,
+        315
+      ]
+    }
+  },
+  {
+    "id": "kwas-azotowy",
+    "nazwa": "Kwas azotowy(V)",
+    "opis": "Pokazano jedną z głównych struktur rezonansowych: HO–N⁺(=O)–O⁻. Azot ma oktet i ładunek formalny +1; tlen połączony pojedynczo, bez wodoru, ma ładunek −1 i trzy wolne pary. Ładunki sumują się do zera.",
+    "wzor": "HNO3",
+    "atomy": {
+      "H": 1,
+      "N": 1,
+      "O": 3
+    },
+    "typ": "czasteczka",
+    "grupa": "kwasy",
+    "model": [
+      [
+        "N",
+        300,
+        133
+      ],
+      [
+        "O",
+        300,
+        35
+      ],
+      [
+        "O",
+        195,
+        194
+      ],
+      [
+        "O",
+        405,
+        194
+      ],
+      [
+        "H",
+        495,
+        139
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        3,
+        1
+      ],
+      [
+        3,
+        4,
+        1
+      ]
+    ],
+    "ladunki": {
+      "0": 1,
+      "2": -1
+    },
+    "katy": [
+      {
+        "atomy": [
+          2,
+          0,
+          3
+        ],
+        "stopnie": 120,
+        "opis": "O–N–O",
+        "etykieta": [
+          300,
+          219
+        ],
+        "rodzaj": "idealny VSEPR"
+      }
+    ],
+    "geometria": "Wokół azotu: układ trygonalny płaski. 120° to idealny kąt VSEPR; rzeczywiste kąty nie są identyczne. Rezonans dotyczy dwóch atomów tlenu niepołączonych z wodorem.",
+    "wolnePary": {
+      "1": [
+        225,
+        315
+      ],
+      "2": [
+        135,
+        225,
+        90
+      ],
+      "3": [
+        0,
+        90
+      ]
+    }
+  },
+  {
+    "id": "kwas-fosforowy",
+    "nazwa": "Kwas fosforowy(V)",
+    "opis": "Zawiera trzy grupy –OH. Pokazano umowny wzór Lewisa z wiązaniem P=O i rozszerzonym oktetem fosforu. Model przedstawia niezdysocjowaną cząsteczkę.",
+    "wzor": "H3PO4",
+    "atomy": {
+      "H": 3,
+      "P": 1,
+      "O": 4
+    },
+    "typ": "czasteczka",
+    "grupa": "kwasy",
+    "model": [
+      [
+        "P",
+        300,
+        125
+      ],
+      [
+        "O",
+        300,
+        30
+      ],
+      [
+        "O",
+        180,
+        125
+      ],
+      [
+        "O",
+        420,
+        125
+      ],
+      [
+        "O",
+        300,
+        245
+      ],
+      [
+        "H",
+        100,
+        181
+      ],
+      [
+        "H",
+        500,
+        181
+      ],
+      [
+        "H",
+        390,
+        280
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        3,
+        1
+      ],
+      [
+        0,
+        4,
+        1
+      ],
+      [
+        2,
+        5,
+        1
+      ],
+      [
+        3,
+        6,
+        1
+      ],
+      [
+        4,
+        7,
+        1
+      ]
+    ],
+    "ladunki": {},
+    "katy": [
+      {
+        "atomy": [
+          2,
+          0,
+          4
+        ],
+        "stopnie": 109.5,
+        "opis": "O–P–O",
+        "etykieta": [
+          229,
+          204
+        ],
+        "rodzaj": "idealny VSEPR"
+      }
+    ],
+    "geometria": "Otoczenie fosforu jest w przybliżeniu tetraedryczne. Kąt 109,5° jest idealną wartością VSEPR; układ na ekranie jest płaskim schematem.",
+    "wolnePary": {
+      "1": [
+        225,
+        315
+      ],
+      "2": [
+        180,
+        270
+      ],
+      "3": [
+        0,
+        270
+      ],
+      "4": [
+        90,
+        180
+      ]
+    }
+  },
+  {
+    "id": "kwas-weglowy",
+    "nazwa": "Kwas węglowy",
+    "opis": "Powstaje w niewielkiej ilości w równowadze dwutlenku węgla z wodą. Cząsteczka zawiera grupę C=O i dwie grupy –OH.",
+    "wzor": "H2CO3",
+    "atomy": {
+      "H": 2,
+      "C": 1,
+      "O": 3
+    },
+    "typ": "czasteczka",
+    "grupa": "kwasy",
+    "model": [
+      [
+        "C",
+        300,
+        132
+      ],
+      [
+        "O",
+        300,
+        32
+      ],
+      [
+        "O",
+        196,
+        192
+      ],
+      [
+        "O",
+        404,
+        192
+      ],
+      [
+        "H",
+        108,
+        141
+      ],
+      [
+        "H",
+        492,
+        141
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        3,
+        1
+      ],
+      [
+        2,
+        4,
+        1
+      ],
+      [
+        3,
+        5,
+        1
+      ]
+    ],
+    "ladunki": {},
+    "katy": [
+      {
+        "atomy": [
+          2,
+          0,
+          3
+        ],
+        "stopnie": 120,
+        "opis": "O–C–O",
+        "etykieta": [
+          300,
+          218
+        ],
+        "rodzaj": "idealny VSEPR"
+      }
+    ],
+    "geometria": "Wokół węgla: układ trygonalny płaski. Podano idealny kąt 120°; wiązanie podwójne i grupy –OH powodują odchylenia rzeczywistych kątów.",
+    "wolnePary": {
+      "1": [
+        225,
+        315
+      ],
+      "2": [
+        90,
+        180
+      ],
+      "3": [
+        0,
+        90
+      ]
+    }
+  },
+  {
+    "id": "kwas-octowy",
+    "nazwa": "Kwas octowy",
+    "opis": "Składnik octu. Zapis CH₃COOH uwidacznia grupę karboksylową –COOH; wzór sumaryczny to C₂H₄O₂. Program buduje konkretnie model kwasu octowego.",
+    "wzor": "CH3COOH",
+    "atomy": {
+      "C": 2,
+      "H": 4,
+      "O": 2
+    },
+    "typ": "czasteczka",
+    "grupa": "kwasy",
+    "model": [
+      [
+        "C",
+        200,
+        140
+      ],
+      [
+        "C",
+        320,
+        140
+      ],
+      [
+        "O",
+        380,
+        36
+      ],
+      [
+        "O",
+        380,
+        244
+      ],
+      [
+        "H",
+        470,
+        244
+      ],
+      [
+        "H",
+        100,
+        140
+      ],
+      [
+        "H",
+        200,
+        46
+      ],
+      [
+        "H",
+        200,
+        234
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        1,
+        2,
+        2
+      ],
+      [
+        1,
+        3,
+        1
+      ],
+      [
+        3,
+        4,
+        1
+      ],
+      [
+        0,
+        5,
+        1
+      ],
+      [
+        0,
+        6,
+        1
+      ],
+      [
+        0,
+        7,
+        1
+      ]
+    ],
+    "ladunki": {},
+    "katy": [
+      {
+        "atomy": [
+          2,
+          1,
+          3
+        ],
+        "stopnie": 120,
+        "opis": "O–C–O",
+        "etykieta": [
+          420,
+          140
+        ],
+        "rodzaj": "idealny VSEPR"
+      },
+      {
+        "atomy": [
+          5,
+          0,
+          6
+        ],
+        "stopnie": 109.5,
+        "opis": "H–C–H",
+        "etykieta": [
+          134,
+          74
+        ],
+        "rodzaj": "idealny VSEPR"
+      }
+    ],
+    "geometria": "Przy węglu grupy –COOH: układ trygonalny płaski (idealnie 120°). Przy węglu grupy CH₃: tetraedryczny (idealnie 109,5°). Rzeczywiste kąty odbiegają od wartości idealnych.",
+    "wolnePary": {
+      "2": [
+        225,
+        315
+      ],
+      "3": [
+        90,
+        180
+      ]
+    }
+  },
+  {
+    "id": "kwas-mrowkowy",
+    "nazwa": "Kwas mrówkowy",
+    "opis": "Najprostszy kwas karboksylowy. Jego zapis HCOOH pokazuje grupę –COOH, a wzór sumaryczny to CH₂O₂. Każdy atom tlenu ma dwie wolne pary.",
+    "wzor": "HCOOH",
+    "atomy": {
+      "H": 2,
+      "C": 1,
+      "O": 2
+    },
+    "typ": "czasteczka",
+    "grupa": "kwasy",
+    "model": [
+      [
+        "C",
+        270,
+        135
+      ],
+      [
+        "O",
+        330,
+        31
+      ],
+      [
+        "O",
+        330,
+        239
+      ],
+      [
+        "H",
+        425,
+        239
+      ],
+      [
+        "H",
+        150,
+        135
+      ]
+    ],
+    "wiazania": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        2,
+        1
+      ],
+      [
+        2,
+        3,
+        1
+      ],
+      [
+        0,
+        4,
+        1
+      ]
+    ],
+    "ladunki": {},
+    "katy": [
+      {
+        "atomy": [
+          1,
+          0,
+          2
+        ],
+        "stopnie": 120,
+        "opis": "O–C–O",
+        "etykieta": [
+          370,
+          135
+        ],
+        "rodzaj": "idealny VSEPR"
+      }
+    ],
+    "geometria": "Wokół węgla: układ trygonalny płaski. Kąt 120° jest wartością idealną VSEPR, nie dokładną wartością kąta O–C–O.",
+    "wolnePary": {
+      "1": [
+        225,
+        315
+      ],
+      "2": [
+        90,
+        180
+      ]
+    }
+  }
+]
+</script>
+<script>
+'use strict';
+// Lista dostępnych substancji pochodzi wyłącznie z osadzonego JSON powyżej.
+const SUBSTANCES = JSON.parse(document.getElementById('substances-data').textContent);
+const ROWS = [
+ ['H',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'He'],
+ ['Li','Be',null,null,null,null,null,null,null,null,null,null,'B','C','N','O','F','Ne'],
+ ['Na','Mg',null,null,null,null,null,null,null,null,null,null,'Al','Si','P','S','Cl','Ar'],
+ ['K','Ca','Sc','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se','Br','Kr'],
+ ['Rb','Sr','Y','Zr','Nb','Mo','Tc','Ru','Rh','Pd','Ag','Cd','In','Sn','Sb','Te','I','Xe'],
+ ['Cs','Ba','57–71','Hf','Ta','W','Re','Os','Ir','Pt','Au','Hg','Tl','Pb','Bi','Po','At','Rn'],
+ ['Fr','Ra','89–103','Rf','Db','Sg','Bh','Hs','Mt','Ds','Rg','Cn','Nh','Fl','Mc','Lv','Ts','Og']
+];
+const SYMBOLS='H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Db Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og'.split(' ');
+const NAMES='wodór hel lit beryl bor węgiel azot tlen fluor neon sód magnez glin krzem fosfor siarka chlor argon potas wapń skand tytan wanad chrom mangan żelazo kobalt nikiel miedź cynk gal german arsen selen brom krypton rubid stront itr cyrkon niob molibden technet ruten rod pallad srebro kadm ind cyna antymon tellur jod ksenon cez bar lantan cer prazeodym neodym promet samar europ gadolin terb dysproz holm erb tul iterb lutet hafn tantal wolfram ren osm iryd platyna złoto rtęć tal ołów bizmut polon astat radon frans rad aktyn tor protaktyn uran neptun pluton ameryk kiur berkel kaliforn einstein ferm mendelew nobel lorens rutherford dubn seaborg bohr has meitner darmsztadt rentgen kopernik nihon flerow moskow liwermor tenes oganeson'.split(' ');
+const COLORS={nonmetal:'#dceee4',s:'#f4e5b9',transition:'#e2eaf5',metal:'#e9e3f4',metalloid:'#f5ddd3',noble:'#dceff2',f:'#f0e4df'};
+const ATOM_COLORS={H:['#eef2ee','#344a46'],O:['#ed846b','#42251e'],C:['#475b61','#ffffff'],N:['#88b5e0','#193347'],Na:['#bba4dd','#34264d'],Cl:['#94c995','#22492e'],S:['#efcd68','#54451d'],Mg:['#9fcfba','#26483a'],Ca:['#c6bbdf','#443957']};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const formula=s=>esc(s).replace(/(\d+)/g,'<sub>$1</sub>');
+const plainFormula=s=>s.replace(/\d/g,n=>'₀₁₂₃₄₅₆₇₈₉'[n]);
+const nameOf=s=>NAMES[SYMBOLS.indexOf(s)];
+let mode='task', selected=0, hints=true, atoms=[], history=[], result=null, nextId=0, drag=null, suppressClick=false;
+let showLonePairs=true, showAngles=true;
+let completed=new Set();
+try{const saved=JSON.parse(localStorage.getItem('atom-po-atomie-v1')||'[]');if(Array.isArray(saved))completed=new Set(saved.filter(id=>SUBSTANCES.some(s=>s.id===id)));}catch(e){}
+function category(s){const n=SYMBOLS.indexOf(s)+1;if((n>=57&&n<=71)||(n>=89&&n<=103))return'f';if('He Ne Ar Kr Xe Rn Og'.split(' ').includes(s))return'noble';if('Li Be Na Mg K Ca Rb Sr Cs Ba Fr Ra'.split(' ').includes(s))return's';if('B Si Ge As Sb Te Po'.split(' ').includes(s))return'metalloid';if('H C N O F P S Cl Se Br I At Ts'.split(' ').includes(s))return'nonmetal';if((n>=21&&n<=30)||(n>=39&&n<=48)||(n>=72&&n<=80)||(n>=104&&n<=112))return'transition';return'metal';}
+function atomColor(s){return ATOM_COLORS[s]||[COLORS[category(s)],'#263d37'];}
+function countAtoms(){return atoms.reduce((acc,a)=>(acc[a.s]=(acc[a.s]||0)+1,acc),{});}
+function matches(count,substance){return Object.keys(count).length===Object.keys(substance.atomy).length&&Object.entries(substance.atomy).every(([s,n])=>count[s]===n);}
+function remember(){history.push(atoms.map(a=>({...a})));if(history.length>60)history.shift();}
+function status(text,success=false){$('notice').textContent=text;$('notice').className='notice'+(success?' success':'');}
+function renderList(){ $('lesson-list').innerHTML=SUBSTANCES.map((s,i)=>`<button class="lesson ${mode==='task'&&selected===i?'active':''} ${completed.has(s.id)?'done':''}" data-index="${i}" aria-current="${mode==='task'&&selected===i?'step':'false'}"><span class="lesson-num">${completed.has(s.id)?'✓':String(i+1).padStart(2,'0')}</span><span><span class="lesson-name">${esc(s.nazwa)}</span><br><span class="lesson-sub">${Object.values(s.atomy).reduce((a,b)=>a+b,0)} atomów · ${s.typ==='jonowy'?'sieć jonowa':s.grupa==='kwasy'?'kwas · cząsteczka':'cząsteczka'}</span></span></button>`).join('');$('progress-label').textContent=`${completed.size} / ${SUBSTANCES.length}`;$('progress-bar').style.width=100*completed.size/SUBSTANCES.length+'%';}
+function renderRecipe(){const count=countAtoms();$('bench-title').textContent=mode==='task'?SUBSTANCES[selected].nazwa:'Co uda Ci się zbudować?';$('hint').hidden=mode==='free';$('hint').setAttribute('aria-pressed',String(hints));$('recipe').innerHTML=mode==='free'?'<span class="muted">Dodawaj atomy. Rozpoznajemy dokładny skład substancji z biblioteki.</span>':hints?`<span class="recipe-label">Przepis na ${formula(SUBSTANCES[selected].wzor)}</span>`+Object.entries(SUBSTANCES[selected].atomy).map(([s,n])=>`<span class="ingredient ${(count[s]||0)===n?'enough':(count[s]||0)>n?'excess':''}">${s} <b>${count[s]||0}/${n}</b></span>`).join(''):'<span class="muted">Podpowiedź ukryta. Dobierz skład samodzielnie.</span>';}
+function angleText(a){return (a.rodzaj==='dokładny (symetria)'?'':'≈')+String(a.stopnie).replace('.',',')+'°';}
+function electronPairs(x,y,directions,radius=40){return directions.map(deg=>{const theta=deg*Math.PI/180,cx=x+radius*Math.cos(theta),cy=y+radius*Math.sin(theta),dx=-Math.sin(theta)*4,dy=Math.cos(theta)*4;return `<g class="lone-pair"><title>Wolna para: 2 elektrony</title><circle cx="${cx+dx}" cy="${cy+dy}" r="2.7" fill="#17685d"/><circle cx="${cx-dx}" cy="${cy-dy}" r="2.7" fill="#17685d"/></g>`;}).join('');}
+function angleDrawing(s,a){const p=s.model[a.atomy[0]],center=s.model[a.atomy[1]],q=s.model[a.atomy[2]],start=Math.atan2(p[2]-center[2],p[1]-center[1]),end=Math.atan2(q[2]-center[2],q[1]-center[1]);let delta=(end-start+Math.PI*3)%(Math.PI*2)-Math.PI;if(Math.abs(Math.abs(delta)-Math.PI)<.001)delta=Math.PI;const radius=43,x1=center[1]+radius*Math.cos(start),y1=center[2]+radius*Math.sin(start),x2=center[1]+radius*Math.cos(start+delta),y2=center[2]+radius*Math.sin(start+delta),[lx,ly]=a.etykieta;return `<g class="bond-angle"><title>${esc(a.opis)}: ${esc(angleText(a))} — ${esc(a.rodzaj)}. Wartość przestrzenna.</title><path d="M ${x1} ${y1} A ${radius} ${radius} 0 0 ${delta>0?1:0} ${x2} ${y2}" fill="none" stroke="#b85d22" stroke-width="1.8"/><rect x="${lx-36}" y="${ly-12}" width="72" height="24" rx="8" fill="#fff6e8" stroke="#efdbbc"/><text x="${lx}" y="${ly+5}" text-anchor="middle" fill="#9b4715" font-size="15" font-weight="700">${esc(angleText(a))}</text></g>`;}
+function drawMolecule(s){let content='';
+ const node=(symbol,x,y,charge='',r=29)=>{const[bg,fg]=atomColor(symbol);return `<g><circle cx="${x}" cy="${y+3}" r="${r}" fill="#183e3215"/><circle cx="${x}" cy="${y}" r="${r}" fill="${bg}" stroke="#ffffff" stroke-width="2"/><text x="${x}" y="${y+7}" text-anchor="middle" fill="${fg}" font-size="${symbol.length>1?21:24}" font-weight="700">${esc(symbol)}</text>${charge?`<text class="formal-charge" x="${x+r-8}" y="${y-r+10}" fill="#183e32" font-size="13" font-weight="800" stroke="#fff" stroke-width="3" paint-order="stroke">${esc(charge)}</text>`:''}</g>`;};
+ if(s.typ==='jonowy'){
+  const syms=Object.keys(s.atomy);content+='<rect class="ionic-box" x="95" y="5" width="410" height="300" rx="18" fill="none" stroke="#b4cbbf" stroke-dasharray="4 5"/>';
+  for(let r=0;r<3;r++)for(let c=0;c<4;c++){const sym=syms[(r+c)%2],x=150+c*100,y=55+r*100;content+=node(sym,x,y,s.jony[sym],25);if(showLonePairs)content+=electronPairs(x,y,s.wolneParyJonow?.[sym]||[],35);}
+ }else{
+  for(const[a,b,order]of s.wiazania){const p=s.model[a],q=s.model[b],dx=q[1]-p[1],dy=q[2]-p[2],len=Math.hypot(dx,dy);for(let k=0;k<order;k++){const d=(k-(order-1)/2)*8,ox=-dy/len*d,oy=dx/len*d;content+=`<line x1="${p[1]+ox}" y1="${p[2]+oy}" x2="${q[1]+ox}" y2="${q[2]+oy}" stroke="#84988e" stroke-width="5" stroke-linecap="round"/>`;}}
+  for(let i=0;i<s.model.length;i++){const[sym,x,y]=s.model[i],charge=s.ladunki?.[i]||0,chargeLabel=charge?`${Math.abs(charge)===1?'':Math.abs(charge)}${charge>0?'+':'−'}`:'';content+=node(sym,x,y,chargeLabel,sym==='H'?23:30);if(showLonePairs)content+=electronPairs(x,y,s.wolnePary?.[i]||[]);}
+  if(showAngles)content+=(s.katy||[]).map(a=>angleDrawing(s,a)).join('');
+ }
+ const description=s.typ==='jonowy'?'Schemat sieci jonowej':'Wzór Lewisa, schemat 2D';
+ return `<svg xmlns="http://www.w3.org/2000/svg" class="molecule" viewBox="0 0 600 360" role="img" aria-label="${esc(description)}: ${esc(s.nazwa)}"><title>${esc(s.nazwa)} — ${esc(plainFormula(s.wzor))}</title><desc>${esc(s.geometria||'')}${showAngles?' '+(s.katy||[]).map(a=>a.opis+' '+angleText(a)+' '+a.rodzaj).join('; '):''}</desc><g transform="translate(0 35)">${content}</g></svg>`;
+}
+function modelDetails(s){const total=Object.values(s.wolnePary||{}).reduce((n,p)=>n+p.length,0),angles=s.katy||[];return `<div class="model-key"><span><span class="electron-key">••</span> jedna wolna para elektronowa</span><span class="angle-key">⌒ kąt między wiązaniami</span></div><div class="geometry-info"><p><b>${s.typ==='jonowy'?'O sieci jonowej':'Geometria i elektrony'}</b></p><p>${esc(s.geometria||'')}</p>${showLonePairs?`<p class="pair-summary">${s.typ==='jonowy'?'Przy każdym anionie: 4 pary elektronowe (8 elektronów).':`Wolne pary w cząsteczce: ${total}. Dwie kropki to dwa elektrony niewiążące; kreska to jedna para wiążąca.`}</p>`:''}${showAngles&&angles.length?`<div class="angle-list">${angles.map(a=>`<span class="angle-detail">${esc(a.opis)} <b>${esc(angleText(a))}</b><small>${esc(a.rodzaj)}</small></span>`).join('')}</div><p class="small muted">Łuki wskazują wybrane wiązania. Wartości opisują geometrię w przestrzeni, nie pomiar rysunku 2D.</p>`:''}</div>`;}
+function renderStage(){if(result){$('stage').innerHTML=`<div class="result"><div class="model-toolbar" aria-label="Warstwy modelu"><button data-layer="pairs" aria-pressed="${showLonePairs}">•• Wolne pary</button><button data-layer="angles" aria-pressed="${showAngles}" ${(result.katy||[]).length?'':'disabled'}>∠ Kąty wiązań</button></div>${drawMolecule(result)}<div class="result-label">${formula(result.wzor)}</div><div class="result-name">${esc(result.nazwa)} · ${result.typ==='jonowy'?'sieć jonowa':'wzór Lewisa · schemat 2D'}</div><p class="result-note">${esc(result.opis)}</p>${modelDetails(result)}<button class="next" id="next">${mode==='task'?'Następne wyzwanie →':'Zbuduj coś nowego →'}</button></div>`;return;}
+ $('stage').innerHTML=atoms.length?'<span class="stage-tip">Możesz przesuwać atomy wewnątrz projektu</span>':'<div class="empty"><div class="empty-symbol">⚛</div><strong>Wszystko zaczyna się od atomu.</strong><p>Przeciągnij tutaj pierwszy pierwiastek z tablicy poniżej lub kliknij jego kafelek.</p></div>';
+ for(const a of atoms){const [bg,fg]=atomColor(a.s);const b=document.createElement('button');b.className='atom';b.dataset.id=a.id;b.textContent=a.s;b.style.cssText=`left:${a.x}%;top:${a.y}%;background:${bg};color:${fg}`;b.setAttribute('aria-label',`${nameOf(a.s)} — atom. Delete usuwa.`);$('stage').append(b);}}
+function renderComposition(){const c=countAtoms();$('composition').innerHTML=atoms.length?'<span class="small muted">Twój skład:</span>'+Object.entries(c).map(([s,n])=>`<button class="atom-chip" data-remove="${s}" title="Usuń jeden atom: ${nameOf(s)}" aria-label="Usuń jeden atom: ${nameOf(s)}">${s}${n>1?`<sub>${n}</sub>`:''}<span>×</span></button>`).join(''):'<span class="small muted">Jeszcze żadnych atomów</span>';$('undo').disabled=!history.length;$('clear').disabled=!atoms.length;}
+function refresh(){renderList();renderRecipe();renderStage();renderComposition();highlightTable();}
+function evaluate(){const c=countAtoms();result=mode==='task'?(matches(c,SUBSTANCES[selected])?SUBSTANCES[selected]:null):SUBSTANCES.find(s=>matches(c,s))||null;if(result){completed.add(result.id);try{localStorage.setItem('atom-po-atomie-v1',JSON.stringify([...completed]));}catch(e){}status(`✓ Zgadza się! ${result.nazwa}: ${plainFormula(result.wzor)}.`,true);}else if(!atoms.length){status('Właściwy skład automatycznie odsłoni model substancji.');}else if(mode==='task'){const req=SUBSTANCES[selected].atomy;const extra=Object.entries(c).filter(([s,n])=>n>(req[s]||0));const missing=Object.entries(req).filter(([s,n])=>(c[s]||0)<n);if(extra.length)status(hints?'Usuń nadmiar: '+extra.map(([s,n])=>`${n-(req[s]||0)} × ${s}`).join(', ')+'.':'W projekcie są nadmiarowe lub niepotrzebne atomy.');else status(hints?'Jeszcze brakuje: '+missing.map(([s,n])=>`${n-(c[s]||0)} × ${s}`).join(', ')+'.':'Dodaj kolejne atomy, aby ukończyć skład.');}else status('Ten skład nie odpowiada jeszcze substancji z biblioteki. Dodaj lub usuń atomy.');refresh();}
+function addAtom(s,x,y){if(atoms.length>=30){status('W projekcie mieści się 30 atomów. Usuń część z nich lub wyczyść projekt.');return;}remember();const i=atoms.length;atoms.push({s,id:++nextId,x:x??(28+(i%5)*11),y:y??(30+(Math.floor(i/5)%4)*16)});evaluate();}
+function removeAtom(id){remember();atoms=atoms.filter(a=>a.id!==id);evaluate();}
+function reset(){if(atoms.length)remember();atoms=[];evaluate();}
+function choose(i){selected=i;mode='task';atoms=[];history=[];setModeUI();evaluate();}
+function setModeUI(){$('task-mode').setAttribute('aria-pressed',String(mode==='task'));$('free-mode').setAttribute('aria-pressed',String(mode==='free'));$('free-info').hidden=mode!=='free';$('list-heading').textContent=mode==='task'?'Twoje wyzwania':'Biblioteka substancji';}
+function switchMode(m){if(m===mode)return;mode=m;atoms=[];history=[];setModeUI();evaluate();}
+function createTable(){const root=$('periodic');root.innerHTML='<div class="table-caption"><span class="big-symbol">H₂O</span><p>Wszystko, co nas otacza, składa się z pierwiastków.<br><b>Odkryj, co powstanie z ich połączenia.</b></p></div>';const add=(s,row,col)=>{if(!s)return;const el=document.createElement(SYMBOLS.includes(s)?'button':'div');el.style.gridRow=row;el.style.gridColumn=col;if(!SYMBOLS.includes(s)){el.className='group-label';el.textContent=s;}else{el.className='element';el.dataset.symbol=s;el.style.setProperty('--tile',COLORS[category(s)]);el.innerHTML=`<span class="number">${SYMBOLS.indexOf(s)+1}</span><span class="symbol">${s}</span><span class="element-name">${nameOf(s)}</span>`;el.title=`${nameOf(s)} (${s}) · liczba atomowa ${SYMBOLS.indexOf(s)+1} · kliknij lub przeciągnij`;el.setAttribute('aria-label',`Dodaj ${nameOf(s)}, ${s}, liczba atomowa ${SYMBOLS.indexOf(s)+1}`);}root.append(el);};ROWS.forEach((row,r)=>row.forEach((s,c)=>add(s,r+1,c+1)));SYMBOLS.slice(56,71).forEach((s,i)=>add(s,9,i+4));SYMBOLS.slice(88,103).forEach((s,i)=>add(s,10,i+4));add('Lantanowce',9,2);root.lastChild.style.gridColumn='1 / 4';add('Aktynowce',10,2);root.lastChild.style.gridColumn='1 / 4';}
+function highlightTable(){const query=$('search').value.trim().toLocaleLowerCase('pl');const useful=mode==='task'?new Set(hints?Object.keys(SUBSTANCES[selected].atomy):SYMBOLS):new Set(SUBSTANCES.flatMap(s=>Object.keys(s.atomy)));for(const b of document.querySelectorAll('.element')){const s=b.dataset.symbol;const found=!query||s.toLowerCase().includes(query)||nameOf(s).includes(query);b.classList.toggle('dim',!found||(!query&&$('highlight').checked&&!useful.has(s)));b.classList.toggle('relevant',useful.has(s)&&$('highlight').checked&&found);}}
+function localPosition(x,y){const r=$('stage').getBoundingClientRect();return{x:Math.max(6,Math.min(94,(x-r.left)/r.width*100)),y:Math.max(12,Math.min(86,(y-r.top)/r.height*100))};}
+document.addEventListener('pointerdown',e=>{const tile=e.target.closest('.element'),node=e.target.closest('.atom');if((!tile&&!node)||e.button!==0)return;drag={symbol:tile?.dataset.symbol,id:node?Number(node.dataset.id):null,x:e.clientX,y:e.clientY,pointerId:e.pointerId,moved:false,pointerType:e.pointerType};});
+document.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.pointerId)return;if(!drag.moved&&Math.hypot(e.clientX-drag.x,e.clientY-drag.y)<8)return;drag.moved=true;const s=drag.symbol||atoms.find(a=>a.id===drag.id)?.s;if(!s)return;const ghost=$('drag-ghost'),[bg,fg]=atomColor(s);ghost.style.display='grid';ghost.style.left=e.clientX+'px';ghost.style.top=e.clientY+'px';ghost.style.background=bg;ghost.style.color=fg;ghost.textContent=s;const r=$('stage').getBoundingClientRect();$('stage').classList.toggle('drag-over',e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom);if(e.cancelable)e.preventDefault();},{passive:false});
+function endDrag(e,cancel=false){if(!drag||e.pointerId!==drag.pointerId)return;const d=drag;drag=null;$('drag-ghost').style.display='none';$('stage').classList.remove('drag-over');if(!d.moved)return;suppressClick=true;setTimeout(()=>suppressClick=false,0);if(cancel)return;const r=$('stage').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)return;const p=localPosition(e.clientX,e.clientY);if(d.symbol)addAtom(d.symbol,p.x,p.y);else{remember();const a=atoms.find(a=>a.id===d.id);if(a){a.x=p.x;a.y=p.y;}refresh();}}
+document.addEventListener('pointerup',e=>endDrag(e));document.addEventListener('pointercancel',e=>endDrag(e,true));
+$('periodic').addEventListener('click',e=>{const b=e.target.closest('.element');if(b&&!suppressClick)addAtom(b.dataset.symbol);});
+$('stage').addEventListener('dblclick',e=>{const b=e.target.closest('.atom');if(b)removeAtom(Number(b.dataset.id));});
+$('stage').addEventListener('keydown',e=>{const b=e.target.closest('.atom');if(b&&(e.key==='Delete'||e.key==='Backspace')){e.preventDefault();removeAtom(Number(b.dataset.id));$('clear').focus();}});
+$('stage').addEventListener('click',e=>{const layer=e.target.closest('[data-layer]');if(layer){if(layer.dataset.layer==='pairs')showLonePairs=!showLonePairs;else showAngles=!showAngles;renderStage();$('stage').querySelector(`[data-layer="${layer.dataset.layer}"]`)?.focus();return;}if(e.target.closest('#next')){if(mode==='free')reset();else choose((selected+1)%SUBSTANCES.length);}});
+$('composition').addEventListener('click',e=>{const b=e.target.closest('[data-remove]');if(b){const a=atoms.findLast(a=>a.s===b.dataset.remove);if(a)removeAtom(a.id);}});
+$('lesson-list').addEventListener('click',e=>{const b=e.target.closest('[data-index]');if(b)choose(Number(b.dataset.index));});
+$('clear').onclick=reset;$('undo').onclick=()=>{if(history.length){atoms=history.pop();evaluate();}};
+$('task-mode').onclick=()=>switchMode('task');$('free-mode').onclick=()=>switchMode('free');$('hint').onclick=()=>{hints=!hints;evaluate();};$('search').oninput=highlightTable;$('highlight').onchange=highlightTable;
+$('library-count').textContent=SUBSTANCES.length;createTable();evaluate();
+</script>
+</body>
+</html>
