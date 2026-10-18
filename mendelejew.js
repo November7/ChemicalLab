@@ -260,8 +260,24 @@ function tooltipPosition(anchor,size,viewport){
  const top=below+size.height<=viewport.height-margin?below:Math.max(margin,anchor.top-gap-size.height);
  return {left,top};
 }
-let tooltipTile=null,tooltipTimer=null;
+let tooltipTile=null,tooltipTimer=null,hoverTimer=null,hoverTile=null;
+const TOOLTIP_DELAY_MS=1000;
+function cancelHoverDelay(){
+ clearTimeout(hoverTimer);hoverTimer=null;
+ hoverTile?.querySelector('.hover-ring')?.remove();hoverTile=null;
+}
+// Pierścień postępu wypełnia się przez opóźnienie, po czym pojawia się chmurka.
+function startHoverDelay(tile){
+ if(hoverTile===tile)return;
+ cancelHoverDelay();
+ if(tooltipTile&&tooltipTile!==tile)hideElementTooltip();
+ clearTimeout(tooltipTimer);
+ hoverTile=tile;
+ tile.insertAdjacentHTML('beforeend',`<svg class="hover-ring" viewBox="0 0 20 20" aria-hidden="true" style="--delay:${TOOLTIP_DELAY_MS}ms"><circle class="track" cx="10" cy="10" r="8"/><circle class="fill" cx="10" cy="10" r="8" pathLength="100"/></svg>`);
+ hoverTimer=setTimeout(()=>{cancelHoverDelay();showElementTooltip(tile);},TOOLTIP_DELAY_MS);
+}
 function hideElementTooltip(){
+ cancelHoverDelay();
  clearTimeout(tooltipTimer);
  if(tooltipTile)tooltipTile.removeAttribute('aria-describedby');
  tooltipTile=null;$('element-tooltip').hidden=true;
@@ -285,8 +301,8 @@ function setupPeriodicTable(opts={}){
  try{const saved=localStorage.getItem('atom-po-atomie-table-color-v1');if(Object.hasOwn(TABLE_SCHEMES,saved))$('table-coloring').value=saved;}catch(e){}
  $('table-coloring').onchange=()=>{hideElementTooltip();updateTableColors();try{localStorage.setItem('atom-po-atomie-table-color-v1',$('table-coloring').value);}catch(e){}};
  updateTableColors();
- $('periodic').addEventListener('pointerover',e=>{const tile=e.target.closest('.element');if(tile&&e.pointerType!=='touch'&&!isDragging())showElementTooltip(tile);});
- $('periodic').addEventListener('pointerout',e=>{const tile=e.target.closest('.element');if(tile&&!tile.contains(e.relatedTarget))scheduleTooltipHide();});
+ $('periodic').addEventListener('pointerover',e=>{const tile=e.target.closest('.element');if(tile&&e.pointerType!=='touch'&& !isDragging()){if(tile===tooltipTile)clearTimeout(tooltipTimer);else startHoverDelay(tile);}});
+  $('periodic').addEventListener('pointerout',e=>{const tile=e.target.closest('.element');if(tile&&!tile.contains(e.relatedTarget)){if(tile===hoverTile)cancelHoverDelay();scheduleTooltipHide();}});
  $('periodic').addEventListener('focusin',e=>{const tile=e.target.closest('.element');if(tile)showElementTooltip(tile);});
  $('periodic').addEventListener('focusout',scheduleTooltipHide);
  $('element-tooltip').addEventListener('pointerenter',()=>clearTimeout(tooltipTimer));
