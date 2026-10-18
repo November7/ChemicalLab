@@ -97,3 +97,5 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible,select:focus-v
 .periodic-data-notes p{margin-top:6px;max-width:950px}
 .periodic-data-notes a{color:var(--accent)}
 @media(max-width:500px){.table-color-control{width:100%;justify-content:space-between}.table-color-control select{min-width:0;flex:1}.table-actions .search{width:100%}.element-tooltip{padding:12px}.tooltip-name{font-size:18px}}
+
+.element .element-mass{font-size:7px;opacity:.75;line-height:1.1}

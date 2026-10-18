@@ -34,6 +34,25 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const plainFormula=s=>s.replace(/\d/g,n=>'₀₁₂₃₄₅₆₇₈₉'[n]);
 const nameOf=s=>NAMES[SYMBOLS.indexOf(s)];
+// Standardowe masy atomowe w u (IUPAC, wartości skrócone). Dla pierwiastków bez stabilnych izotopów
+// (Tc, Pm, Po-Ac, Np i cięższe) podano liczbę masową najtrwalszego izotopu.
+const ATOMIC_MASSES=Object.freeze([
+ 1.008,4.0026,6.94,9.0122,10.81,12.011,14.007,15.999,18.998,20.180,
+ 22.990,24.305,26.982,28.085,30.974,32.06,35.45,39.948,39.098,40.078,
+ 44.956,47.867,50.942,51.996,54.938,55.845,58.933,58.693,63.546,65.38,
+ 69.723,72.630,74.922,78.971,79.904,83.798,85.468,87.62,88.906,91.224,
+ 92.906,95.95,98,101.07,102.91,106.42,107.87,112.41,114.82,118.71,
+ 121.76,127.60,126.90,131.29,132.91,137.33,138.91,140.12,140.91,144.24,
+ 145,150.36,151.96,157.25,158.93,162.50,164.93,167.26,168.93,173.05,
+ 174.97,178.49,180.95,183.84,186.21,190.23,192.22,195.08,196.97,200.59,
+ 204.38,207.2,208.98,209,210,222,223,226,227,232.04,
+ 231.04,238.03,237,244,243,247,247,251,252,257,
+ 258,259,266,267,268,269,270,277,278,281,
+ 282,285,286,289,290,293,294,294
+]);
+const massOf=s=>ATOMIC_MASSES[SYMBOLS.indexOf(s)];
+const massText=s=>massOf(s).toLocaleString('pl-PL',{maximumFractionDigits:4});
+const massIsMassNumber=s=>{const n=SYMBOLS.indexOf(s)+1;return n===43||n===61||(n>=84&&n<=89)||n>=93;};
 // PubChem periodic table snapshot, 2026-10-18. Temperatures in kelvin; null means unavailable.
 // https://pubchem.ncbi.nlm.nih.gov/rest/pug/periodictable/JSON
 // He/C/As transitions are qualified in elementTemperature using RSC data.
@@ -159,7 +178,7 @@ const ELEMENT_PROPERTIES=Object.freeze({
 });
 const TABLE_SCHEMES={
  families:{label:'Rodziny pierwiastków',note:'Kolory oznaczają rodziny pierwiastków. Wyróżnienie przydatnych atomów jest niezależne od wybranego podziału.',groups:{nonmetal:['Niemetale','#dbeafe'],s:['Metale bloku s','#f4e5b9'],transition:['Metale przejściowe','#e2eaf5'],metal:['Pozostałe metale','#e9e3f4'],metalloid:['Półmetale','#f5ddd3'],noble:['Gazy szlachetne','#dceff2'],f:['Lantanowce i aktynowce','#f0e4df']}},
- blocks:{label:'Bloki s, p, d, f',note:'Przyjęto konwencję tablicy RSC: He należy do bloku s, La i Ac do d, a Ce–Lu i Th–Lr do f. Istnieją też inne konwencje granicy bloków d i f.',groups:{s:['Blok s','#dbeafe'],p:['Blok p','#f4e5b9'],d:['Blok d','#e9e3f4'],f:['Blok f','#f5ddd3']}},
+ blocks:{label:'Bloki s, p, d, f',note:'Uwaga: Przyjęto konwencję tablicy RSC: He należy do bloku s, La i Ac do d, a Ce–Lu i Th–Lr do f. Istnieją też inne konwencje granicy bloków d i f.',groups:{s:['Blok s','#dbeafe'],p:['Blok p','#f4e5b9'],d:['Blok d','#e9e3f4'],f:['Blok f','#f5ddd3']}},
  metals:{label:'Metale / niemetale',note:'Półmetale wydzielono jako osobną grupę. Ich granica jest umowna; tutaj przyjęto klasyfikację PubChem. Klasyfikacja najcięższych pierwiastków jest przewidywana.',groups:{metal:['Metale','#dbeafe'],nonmetal:['Niemetale','#f4e5b9'],metalloid:['Półmetale','#e9e3f4']}},
  phase:{label:'Stan skupienia (20°C)',note:'Stan przy 20°C i ciśnieniu około 1 atm. Dla pierwiastków, których stan makroskopowy nie jest potwierdzony, pokazano osobną kategorię.',groups:{solid:['Ciało stałe','#dbeafe'],liquid:['Ciecz','#e9e3f4'],gas:['Gaz','#f4e5b9'],unknown:['Stan niepotwierdzony','#e5e9ef']}},
  radioactivity:{label:'Radioaktywność',note:'Podział dotyczy istnienia stabilnych izotopów, nie aktywności konkretnej próbki. Pierwiastki ze stabilnymi izotopami też mają radioizotopy (np. ¹⁴C). Bi, Tc, Pm i wszystkie pierwiastki cięższe od Bi nie mają stabilnych izotopów.',groups:{stable:['Ma stabilne izotopy','#dbeafe'],radioactive:['Tylko izotopy promieniotwórcze','#f5ddd3']}},
@@ -232,7 +251,7 @@ function elementTooltip(symbol){
  let oxide=examples?examples.map(([f,kind])=>`${plainFormula(f)} - ${TABLE_SCHEMES.oxides.groups[kind][0].toLocaleLowerCase('pl')}`).join('; '):TABLE_SCHEMES.oxides.groups[oxideCategory(symbol)][0];
  if(symbol==='F')oxide='Związki z tlenem to fluorki tlenu, nie tlenki fluoru.';
  if(symbol==='O')oxide='Tlen jest składnikiem tlenków; O₂ i O₃ nie są tlenkami.';
- return `<strong class="tooltip-name">${esc(nameOf(symbol))} <span>${esc(symbol)}</span></strong><p class="tooltip-subtitle">Liczba atomowa ${n} · blok ${elementBlock(symbol)}</p><dl>${row('Elektroujemność (Pauling)',propertyNumber(data.en))}${row('Promień kowalencyjny (ref.)',ATOM_REFERENCE_RADII_PM[symbol]+' pm')}${row('Temperatura topnienia',elementTemperature(symbol,'melt'))}${row('Temperatura wrzenia',elementTemperature(symbol,'boil'))}${row('Stan przy 20°C',TABLE_SCHEMES.phase.groups[data.phase][0])}${row('Charakter pierwiastka',TABLE_SCHEMES.metals.groups[data.metal][0])}${row('Izotopy',TABLE_SCHEMES.radioactivity.groups[elementClass(symbol,'radioactivity')][0])}${row('Wybrane tlenki',oxide)}</dl><p class="tooltip-footnote">${symbol==='C'?'Grafit sublimuje przy około 3825°C. ':symbol==='As'?'Arsen sublimuje przy około 616°C. ':symbol==='P'?'Temperatury dla fosforu białego. ':''}Temperatury są orientacyjne; zależą od ciśnienia i odmiany pierwiastka. ${data.phase==='unknown'?'Stan makroskopowy nie jest potwierdzony. ':''}Dane: PubChem / RSC.</p>`;
+ return `<strong class="tooltip-name">${esc(nameOf(symbol))} <span>${esc(symbol)}</span></strong><p class="tooltip-subtitle">Liczba atomowa ${n} · blok ${elementBlock(symbol)}</p><dl>${row(massIsMassNumber(symbol)?'Masa atomowa (najtrwalszy izotop)':'Masa atomowa',massText(symbol)+' u')}${row('Elektroujemność (Pauling)',propertyNumber(data.en))}${row('Promień kowalencyjny (ref.)',ATOM_REFERENCE_RADII_PM[symbol]+' pm')}${row('Temperatura topnienia',elementTemperature(symbol,'melt'))}${row('Temperatura wrzenia',elementTemperature(symbol,'boil'))}${row('Stan przy 20°C',TABLE_SCHEMES.phase.groups[data.phase][0])}${row('Charakter pierwiastka',TABLE_SCHEMES.metals.groups[data.metal][0])}${row('Izotopy',TABLE_SCHEMES.radioactivity.groups[elementClass(symbol,'radioactivity')][0])}${row('Wybrane tlenki',oxide)}</dl><p class="tooltip-footnote">${symbol==='C'?'Grafit sublimuje przy około 3825°C. ':symbol==='As'?'Arsen sublimuje przy około 616°C. ':symbol==='P'?'Temperatury dla fosforu białego. ':''}Temperatury są orientacyjne; zależą od ciśnienia i odmiany pierwiastka. ${data.phase==='unknown'?'Stan makroskopowy nie jest potwierdzony. ':''}Dane: PubChem / RSC.</p>`;
 }
 function tooltipPosition(anchor,size,viewport){
  const gap=10,margin=8;
@@ -258,7 +277,7 @@ function showElementTooltip(tile){
 }
 function scheduleTooltipHide(){clearTimeout(tooltipTimer);tooltipTimer=setTimeout(hideElementTooltip,160);}
 function category(s){const n=SYMBOLS.indexOf(s)+1;if((n>=57&&n<=71)||(n>=89&&n<=103))return'f';if('He Ne Ar Kr Xe Rn Og'.split(' ').includes(s))return'noble';if('Li Be Na Mg K Ca Rb Sr Cs Ba Fr Ra'.split(' ').includes(s))return's';if('B Si Ge As Sb Te Po'.split(' ').includes(s))return'metalloid';if('H C N O F P S Cl Se Br I At Ts'.split(' ').includes(s))return'nonmetal';if((n>=21&&n<=30)||(n>=39&&n<=48)||(n>=72&&n<=80)||(n>=104&&n<=112))return'transition';return'metal';}
-function createTable(tileLabel=(name,s,n)=>`${name}, ${s}, liczba atomowa ${n}`){const root=$('periodic');root.innerHTML='<div class="table-caption"><span class="big-symbol">Układ okresowy pierwiastków</span></div>';const add=(s,row,col)=>{if(!s)return;const el=document.createElement(SYMBOLS.includes(s)?'button':'div');el.style.gridRow=row;el.style.gridColumn=col;if(!SYMBOLS.includes(s)){el.className='group-label';el.textContent=s;}else{el.className='element';el.dataset.symbol=s;el.style.setProperty('--tile',COLORS[category(s)]);el.innerHTML=`<span class="number">${SYMBOLS.indexOf(s)+1}</span><span class="symbol">${s}</span><span class="element-name">${nameOf(s)}</span>`;el.setAttribute('aria-label',tileLabel(nameOf(s),s,SYMBOLS.indexOf(s)+1));}root.append(el);};ROWS.forEach((row,r)=>row.forEach((s,c)=>add(s,r+1,c+1)));SYMBOLS.slice(56,71).forEach((s,i)=>add(s,9,i+4));SYMBOLS.slice(88,103).forEach((s,i)=>add(s,10,i+4));add('Lantanowce',9,2);root.lastChild.style.gridColumn='1 / 4';add('Aktynowce',10,2);root.lastChild.style.gridColumn='1 / 4';}
+function createTable(tileLabel=(name,s,n)=>`${name}, ${s}, liczba atomowa ${n}`){const root=$('periodic');root.innerHTML='<div class="table-caption"><span class="big-symbol">Układ okresowy pierwiastków</span></div>';const add=(s,row,col)=>{if(!s)return;const el=document.createElement(SYMBOLS.includes(s)?'button':'div');el.style.gridRow=row;el.style.gridColumn=col;if(!SYMBOLS.includes(s)){el.className='group-label';el.textContent=s;}else{el.className='element';el.dataset.symbol=s;el.style.setProperty('--tile',COLORS[category(s)]);el.innerHTML=`<span class="number">${SYMBOLS.indexOf(s)+1}</span><span class="symbol">${s}</span><span class="element-name">${nameOf(s)}</span><span class="element-mass">${massText(s)}</span>`;el.setAttribute('aria-label',tileLabel(nameOf(s),s,SYMBOLS.indexOf(s)+1));}root.append(el);};ROWS.forEach((row,r)=>row.forEach((s,c)=>add(s,r+1,c+1)));SYMBOLS.slice(56,71).forEach((s,i)=>add(s,9,i+4));SYMBOLS.slice(88,103).forEach((s,i)=>add(s,10,i+4));add('Lantanowce',9,2);root.lastChild.style.gridColumn='1 / 4';add('Aktynowce',10,2);root.lastChild.style.gridColumn='1 / 4';}
 // Podpina kolorowanie, legendę i chmurki. opts: isDragging() oraz tileLabel(nazwa, symbol, numer).
 function setupPeriodicTable(opts={}){
  const isDragging=opts.isDragging||(()=>false);
