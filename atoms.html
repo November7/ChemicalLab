@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header><div class="header-inner"><div class="brand-mark" aria-hidden="true">⚛</div><div class="brand">atom po atomie <span>/ laboratorium</span></div></div></header>
+<header><div class="header-inner"><div class="brand-mark" aria-hidden="true">⚛</div><div class="brand">ChemicalLab <span>/ laboratorium</span></div></div></header>
 <main>
 <section class="intro"><div><div class="eyebrow">Odkrywaj • łącz • zrozum</div><h1>Małe atomy - wielka chemia.</h1><p class="muted">Wybierz pierwiastki z układu okresowego i zbuduj swoją pierwszą substancję.</p></div><div class="mode-switch" aria-label="Tryb pracy"><button id="task-mode" aria-pressed="true">Wyzwania</button><button id="free-mode" aria-pressed="false">Swobodne budowanie</button><button id="dictionary-mode" aria-pressed="false">Słownik</button></div></section>
 <div class="lab" id="lab">
@@ -447,6 +447,17 @@ function ionCloud(ion,sizes){
  const hull=ionOutline(ion,sizes),positive=ion.ladunek>0;
  return `<polygon class="ion-cloud" points="${hull.map(p=>p.join(',')).join(' ')}" fill="${positive?'#e8a94a':'#6ca6d2'}" fill-opacity=".1" stroke="${positive?'#c79c59':'#79a9bd'}" stroke-opacity=".55" stroke-width="1.5" stroke-linejoin="round"/>`;
 }
+function ionicWave(x1,y1,x2,y2){
+ const dx=x2-x1,dy=y2-y1,length=Math.hypot(dx,dy);
+ if(!length)return `M ${x1} ${y1}`;
+ const ux=dx/length,uy=dy/length,steps=Math.max(2,Math.round(length/16)*2),step=length/steps,amplitude=Math.min(4,step/2);
+ let path=`M ${x1} ${y1}`;
+ for(let i=0;i<steps;i++){
+  const middle=(i+.5)*step,offset=(i%2?-1:1)*amplitude*2;
+  path+=` Q ${x1+ux*middle-uy*offset} ${y1+uy*middle+ux*offset} ${i===steps-1?x2:x1+ux*(i+1)*step} ${i===steps-1?y2:y1+uy*(i+1)*step}`;
+ }
+ return path;
+}
 function drawIonicAssembly(s,sizes){
  const layout=ionicLayout(s,sizes),{nodes}=layout,pairs=[];
  nodes.forEach((a,i)=>nodes.slice(i+1).forEach((b,j)=>{if(a.ion.ladunek*b.ion.ladunek<0)pairs.push({i,j:i+j+1,d:Math.hypot(a.x-b.x,a.y-b.y)});}));
@@ -456,7 +467,7 @@ function drawIonicAssembly(s,sizes){
   if(root(i)===root(j))continue;parents[root(i)]=root(j);
   const a=nodes[i],b=nodes[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),ux=dx/d,uy=dy/d;
   const ra=ionEdge(a,ux,uy),rb=ionEdge(b,-ux,-uy);
-  links+=`<path class="ionic-attraction" data-from="${i}" data-to="${j}" d="M ${a.x+ux*ra} ${a.y+uy*ra} L ${b.x-ux*rb} ${b.y-uy*rb}" stroke="#8c83aa" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round" fill="none"><title>Przyciąganie elektrostatyczne między jonami o przeciwnych ładunkach</title></path>`;
+  links+=`<path class="ionic-attraction" data-from="${i}" data-to="${j}" d="${ionicWave(a.x+ux*ra,a.y+uy*ra,b.x-ux*rb,b.y-uy*rb)}" stroke="#8c83aa" stroke-width="3" stroke-linecap="round" fill="none"><title>Przyciąganie elektrostatyczne między jonami o przeciwnych ładunkach</title></path>`;
  }
  const bodies=nodes.map((n,i)=>`<g class="assembly-ion" data-ion="${i}" data-charge="${n.ion.ladunek}" transform="translate(${n.x-n.cx} ${n.y-n.cy})"><title>${esc(n.ion.nazwa)}: ${esc(chargeText(n.ion.ladunek))}</title>${ionCloud(n.ion,sizes)}${drawMolecule({...n.ion,ion:true},sizes,true)}${n.ion.model.length>1?`<text class="ion-charge-label" x="${n.cx}" y="${n.cy-n.hh+18}" text-anchor="middle" font-size="19" font-weight="700" fill="#345d67">${esc(plainFormula(n.ion.wzor))}<tspan baseline-shift="super" font-size="13">${esc(chargeText(n.ion.ladunek))}</tspan></text>`:''}</g>`).join('');
  return `<div class="ionic-scene" tabindex="0" role="region" aria-label="Układ jonów; wąski ekran pozwala przewijać rysunek"><svg xmlns="http://www.w3.org/2000/svg" class="molecule ionic-assembly" style="min-width:${Math.max(360,Math.round(layout.width*.5))/2}px" viewBox="${layout.left} ${layout.top} ${layout.width} ${layout.height}" role="img" aria-label="Układ jonów: ${esc(s.nazwa)}"><title>${esc(s.nazwa)}: wszystkie jony z jednej jednostki wzoru ${esc(plainFormula(s.wzor))}</title><desc>Uproszczony układ pokazujący skład i wybrane oddziaływania. Rozmieszczenie nie odtwarza geometrii kryształu ani osobnej cząsteczki.</desc>${links}${bodies}</svg></div>`;
@@ -490,10 +501,10 @@ function drawMolecule(s,sizeContext=null,fragment=false){
 function modelDetails(s){
  const total=Object.values(s.wolnePary||{}).reduce((n,p)=>n+p.length,0),single=Object.values(s.niesparowane||{}).reduce((n,p)=>n+p.length,0),angles=modelAngles(s);
  const pairSummary=hasCoordination(s)?'Niebieska strzałka oznacza parę przekazaną przez ligand do wiązania z metalem. Nie pokazujemy jej ponownie jako wolnej pary. Pomijamy elektrony d metalu; nie jest to pełny wzór Lewisa centrum metalicznego. Ładunek całego kompleksu uwzględnia metal i wszystkie ligandy.':s.skladnikiJonowe?'Kreski łączą atomy wewnątrz jonów wieloatomowych. Między osobnymi jonami nie rysujemy wiązań cząsteczkowych. Kationy metali pokazano bez elektronów wewnętrznych.':s.typ==='jonowy'?'Przy każdym anionie: 4 pary elektronowe (8 elektronów).':`Wolne pary w cząsteczce: ${total}.${single?` Elektrony niesparowane: ${single}.`:''} Dwie kropki to para elektronów niewiążących; kreska to jedna para wiążąca.`;
- const legend=`<div class="model-key"><span><span class="electron-key">••</span> jedna wolna para elektronowa</span>${single?'<span>• elektron niesparowany</span>':''}${s.typ==='jonowy'?'<span class="ionic-key">··· przyciąganie między jonami</span>':''}${hasCoordination(s)?'<span class="coordination-key">→ wiązanie koordynacyjne: ligand do metalu</span>':''}${showAngles&&angles.some(a=>a.rysuj!==false)?'<span class="angle-key">⌒ kąt między wiązaniami</span>':''}</div>`;
+ const legend=`<div class="model-key"><span><span class="electron-key">••</span> jedna wolna para elektronowa</span>${single?'<span>• elektron niesparowany</span>':''}${s.typ==='jonowy'?'<span class="ionic-key">∿ przyciąganie między jonami</span>':''}${hasCoordination(s)?'<span class="coordination-key">→ wiązanie koordynacyjne: ligand do metalu</span>':''}${showAngles&&angles.some(a=>a.rysuj!==false)?'<span class="angle-key">⌒ kąt między wiązaniami</span>':''}</div>`;
  return `<div class="geometry-info">
   <section class="model-info-section"><h3>Opis</h3><p class="result-note">${esc(s.opis||'')}</p></section>
-  <section class="model-info-section"><h3>Legenda</h3>${atomSizeLegend(s)}${s.typ!=='sieciowy'?legend:''}${s.typ==='jonowy'?`<p class="ionic-caption">Każdy jon pokazano osobno. Kropkowane linie oznaczają wybrane oddziaływania przyciągające.</p>`:''}</section>
+  <section class="model-info-section"><h3>Legenda</h3>${atomSizeLegend(s)}${s.typ!=='sieciowy'?legend:''}${s.typ==='jonowy'?`<p class="ionic-caption">Każdy jon pokazano osobno. Falowane linie oznaczają wybrane oddziaływania przyciągające.</p>`:''}</section>
   <section class="model-info-section"><h3>Geometria</h3><p>${esc(s.geometria||'')}</p>${(s.skladnikiJonowe||[]).filter(part=>IONS[part.jon].geometria).map(part=>`<p class="ion-note"><b>${formula(IONS[part.jon].wzor)}:</b> ${esc(IONS[part.jon].geometria)}</p>`).join('')}${showLonePairs&&s.typ!=='sieciowy'?`<p class="pair-summary">${esc(pairSummary)}</p>`:''}${showAngles&&angles.length?`<div class="angle-list">${angles.map(a=>`<span class="angle-detail">${esc(a.opis)} <b>${esc(angleText(a))}</b><small>${esc(a.rodzaj)}</small></span>`).join('')}</div><p class="small muted">${angles.some(a=>a.rysuj!==false)?'Łuki wskazują wybrane wiązania. ':''}${angles.some(a=>a.rysuj===false)?'Kąty tetraedryczne podano tylko w opisie, bez łuku na płaskim schemacie. ':''}Wartości opisują geometrię w przestrzeni, nie pomiar rysunku 2D.</p>`:''}${angleAvailability(s)?`<p class="angle-availability">${esc(angleAvailability(s))}</p>`:''}</section>
  </div>`;
 }

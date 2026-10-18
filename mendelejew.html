@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#315fb1">
 <title>Układ okresowy pierwiastków - Mendelejew</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css">
+<style>main{max-width:none}.table-card{max-width:100%;margin-inline:auto}</style>
+
 </head>
 <body>
-<header><div class="header-inner"><div class="brand-mark" aria-hidden="true">⚛</div><div class="brand">atom po atomie <span>/ układ okresowy</span></div></div></header>
+<header><div class="header-inner"><div class="brand-mark" aria-hidden="true">⚛</div><div class="brand">ChemicalLab <span>/ układ okresowy</span></div></div></header>
 <main>
 <section class="card table-card" id="table-card"><div class="table-heading"><div><h2>Układ okresowy pierwiastków</h2><p>Najedź na kafelek lub wybierz go klawiszem Tab, aby zobaczyć właściwości pierwiastka.</p></div><div class="table-actions"><label class="table-color-control" for="table-coloring">Kolorowanie<select id="table-coloring" aria-describedby="periodic-color-note"><option value="families">Rodziny pierwiastków</option><option value="blocks">Bloki s, p, d, f</option><option value="metals">Metale / niemetale</option><option value="phase">Stan skupienia (20°C)</option><option value="radioactivity">Radioaktywność</option><option value="oxides">Charakter tlenków</option></select></label></div></div><div class="periodic-scroll"><div class="periodic" id="periodic" aria-label="Układ okresowy pierwiastków"></div></div><div class="legend" id="periodic-legend" aria-label="Legenda kolorowania"></div><p class="table-color-note" id="periodic-color-note" aria-live="polite"></p><details class="periodic-data-notes"><summary>Dane pierwiastków i źródła</summary><p>Escape zamyka chmurkę z właściwościami.</p><p>Elektroujemność podano w skali Paulinga, temperatury w °C (przeliczone z K). Dane lokalne z <a href="https://pubchem.ncbi.nlm.nih.gov/periodic-table/" target="_blank" rel="noopener noreferrer">PubChem</a>, pobrane 18.10.2026; brak wartości jest oznaczony, nie zastępujemy go zerem. Wyjątki fazowe i konwencja bloków: <a href="https://periodic-table.rsc.org/" target="_blank" rel="noopener noreferrer">Royal Society of Chemistry</a>. Dla najcięższych pierwiastków stan makroskopowy pozostaje niepotwierdzony.</p><p>Przykłady charakteru tlenków: <a href="https://openstax.org/books/chemistry-2e/pages/18-9-occurrence-preparation-and-compounds-of-oxygen" target="_blank" rel="noopener noreferrer">OpenStax - tlen i tlenki</a>, <a href="https://openstax.org/books/chemistry-2e/pages/19-1-occurrence-preparation-and-properties-of-transition-metals-and-their-compounds" target="_blank" rel="noopener noreferrer">tlenki metali przejściowych</a> oraz <a href="https://openstax.org/books/chemistry-2e/pages/18-3-structure-and-general-properties-of-the-metalloids" target="_blank" rel="noopener noreferrer">półmetale</a>. Uzupełnienie: <a href="https://orca.cardiff.ac.uk/id/eprint/10315/" target="_blank" rel="noopener noreferrer">zasadowość tlenków lantanowców(III)</a> i <a href="https://pubs.rsc.org/en/content/articlehtml/2010/cp/c0cp00138d" target="_blank" rel="noopener noreferrer">amfoteryczny In₂O₃</a>. To zestawienie dydaktyczne wybranych tlenków, nie wszystkich związków pierwiastka. Klasyfikacja izotopów: <a href="https://periodic-table.rsc.org/element/61/promethium" target="_blank" rel="noopener noreferrer">RSC</a>. Wszystkie chmurki i podziały działają offline.</p></details><p class="help">Układ okresowy można przewijać poziomo.</p></section>
 </main>
@@ -16,23 +18,22 @@
 <script src="mendelejew.js"></script>
 <script>
 setupPeriodicTable();
-// Skaluje tablicę proporcjonalnie, aby mieściła się w oknie (limituje mniejszy z wymiarów).
-// Dolna granica to 720 px wysokości tablicy; gdy się nie mieści na szerokość, pojawia się przewijanie poziome.
-const MIN_HEIGHT=720;
+// Proporcje pełnego widoku atoms.html: 1440 px minus odstępy main, karty i przewijania.
+// Wysokość wyznacza skalę: układ zajmuje 70% wysokości okna, bez dolnego limitu.
+const TABLE_BASE_WIDTH=1320;
 function fitTable(){
- const table=document.getElementById('periodic'),scroll=table.parentElement;
- table.style.zoom=1;table.style.width='940px';table.style.margin='0 auto';
- const baseW=940,baseH=table.offsetHeight,cs=getComputedStyle(scroll);
- const availW=scroll.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
- const below=document.getElementById('periodic-legend').offsetHeight+document.getElementById('periodic-color-note').offsetHeight+90;
- const availH=innerHeight-scroll.getBoundingClientRect().top-parseFloat(cs.paddingTop)-below;
- const natural=baseW;
- const scale=Math.max(Math.min(availW/natural,availH/baseH),MIN_HEIGHT/baseH);
- table.style.zoom=scale;
+ const table=document.getElementById('periodic');
+ table.style.zoom=1;table.style.width=`${TABLE_BASE_WIDTH}px`;table.style.margin='0 auto';
+ const targetHeight=innerHeight*.7;
+ table.style.zoom=targetHeight/table.offsetHeight;
+ const card=document.getElementById('table-card'),cardStyle=getComputedStyle(card),scrollStyle=getComputedStyle(table.parentElement);
+ const spacing=['paddingLeft','paddingRight','borderLeftWidth','borderRightWidth'].reduce((sum,key)=>sum+parseFloat(cardStyle[key]),0)+parseFloat(scrollStyle.paddingLeft)+parseFloat(scrollStyle.paddingRight);
+ card.style.width=`${Math.ceil(table.getBoundingClientRect().width+spacing)}px`;
 }
 addEventListener('resize',fitTable);
 document.getElementById('table-coloring').addEventListener('change',fitTable);
 fitTable();
+document.fonts.ready.then(fitTable);
 </script>
 </body>
 </html>
