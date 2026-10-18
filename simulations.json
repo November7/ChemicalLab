@@ -4,5 +4,11 @@
     "description": "Interaktywne laboratorium: układ okresowy, budowanie cząsteczek z atomów i ich geometria.",
     "url": "atoms.html",
     "status": "published"
+  },
+  {
+    "title": "Układ okresowy",
+    "description": "Tablica Mendelejewa: układ okresowy pierwiastków.",
+    "url": "mendelejew.html",
+    "status": "published"
   }
 ]
