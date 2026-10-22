@@ -283,6 +283,7 @@ function hideElementTooltip(){
  tooltipTile=null;$('element-tooltip').hidden=true;
 }
 function showElementTooltip(tile){
+ cancelHoverDelay();
  clearTimeout(tooltipTimer);
  if(tooltipTile&&tooltipTile!==tile)tooltipTile.removeAttribute('aria-describedby');
  tooltipTile=tile;
