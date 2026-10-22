@@ -345,6 +345,7 @@ let challengeIndices=[], dictionarySelected=0;
 let completed=new Set();
 try{const saved=JSON.parse(localStorage.getItem('atom-po-atomie-v1')||'[]');if(Array.isArray(saved))completed=new Set(saved.filter(id=>SUBSTANCES.some(s=>s.id===id)));}catch(e){}
 try{const n=Number(localStorage.getItem('atom-po-atomie-challenge-count-v1'));if(Number.isInteger(n)&&n>=1&&n<=10)$('challenge-count').value=String(n);}catch(e){}
+const atomCount=n=>`${n} ${n===1?'atom':n%10>=2&&n%10<=4&&(n%100<12||n%100>14)?'atomy':'atomów'}`;
 const isIonic=s=>s.typ==='jonowy';
 try{const f=JSON.parse(localStorage.getItem('atom-po-atomie-filters-v1')||'null');if(f&&typeof f.covalent==='boolean'&&typeof f.ionic==='boolean'&&(f.covalent||f.ionic)){$('filter-covalent').checked=f.covalent;$('filter-ionic').checked=f.ionic;}}catch(e){}
 function allowedIndices(){const covalent=$('filter-covalent').checked,ionic=$('filter-ionic').checked;return SUBSTANCES.map((_,i)=>i).filter(i=>isIonic(SUBSTANCES[i])?ionic:covalent);}
@@ -399,7 +400,7 @@ function renderList(){
  const indices=mode==='task'?challengeIndices:allowedIndices().filter(i=>!query||normalizeSearch(SUBSTANCES[i].nazwa).includes(query)||normalizeSearch(SUBSTANCES[i].wzor).includes(query.replace(/\s/g,'')));
  $('dictionary-empty').hidden=mode!=='dictionary'||indices.length>0;
  const active=mode==='dictionary'?dictionarySelected:selected;
- $('lesson-list').innerHTML=indices.map((i,position)=>{const s=SUBSTANCES[i],done=mode==='task'&&completed.has(s.id);return `<button class="lesson ${active===i?'active':''} ${done?'done':''}" data-index="${i}" aria-current="${active===i?(mode==='dictionary'?'true':'step'):'false'}"><span class="lesson-num">${done?'✓':String(position+1).padStart(2,'0')}</span><span><span class="lesson-name">${esc(s.nazwa)}</span><br><span class="lesson-sub">${Object.values(s.atomy).reduce((a,b)=>a+b,0)} atomów · ${({tlenki:'tlenek',wodorotlenki:'wodorotlenek',kwasy:'kwas',sole:'sól',kompleksy:'kompleks',pierwiastki:'substancja prosta'})[s.grupa]||'cząsteczka'} · ${s.typ==='jonowy'?'budowa jonowa':s.typ==='sieciowy'?'sieć':'model 2D'}</span></span></button>`;}).join('');
+ $('lesson-list').innerHTML=indices.map((i,position)=>{const s=SUBSTANCES[i],done=mode==='task'&&completed.has(s.id);return `<button class="lesson ${active===i?'active':''} ${done?'done':''}" data-index="${i}" aria-current="${active===i?(mode==='dictionary'?'true':'step'):'false'}"><span class="lesson-num">${done?'✓':String(position+1).padStart(2,'0')}</span><span><span class="lesson-name">${esc(s.nazwa)}</span><br><span class="lesson-sub">${atomCount(Object.values(s.atomy).reduce((a,b)=>a+b,0))} · ${({tlenki:'tlenek',wodorotlenki:'wodorotlenek',kwasy:'kwas',sole:'sól',kompleksy:'kompleks',pierwiastki:'substancja prosta'})[s.grupa]||'cząsteczka'} · ${s.typ==='jonowy'?'budowa jonowa':s.typ==='sieciowy'?'sieć':'model 2D'}</span></span></button>`;}).join('');
  const done=challengeIndices.filter(i=>completed.has(SUBSTANCES[i].id)).length;
  $('progress-label').textContent=mode==='task'?`${done} / ${challengeIndices.length}`:query||indices.length<SUBSTANCES.length?`${indices.length} / ${SUBSTANCES.length}`:`${SUBSTANCES.length}`;
  $('progress-bar').style.width=100*done/challengeIndices.length+'%';
