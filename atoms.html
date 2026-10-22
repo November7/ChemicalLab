@@ -15,9 +15,12 @@
 <aside class="card lessons"><div class="section-top"><h2 id="list-heading">Twoje wyzwania</h2><span class="count-badge" id="progress-label"></span></div><div class="challenge-controls" id="challenge-controls"><label for="challenge-count">Liczba wyzwań</label><div><select id="challenge-count"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select><button class="next" id="random-challenges">Losuj</button></div></div><div class="progress" id="challenge-progress"><span id="progress-bar"></span></div><p class="free-info" id="free-info" hidden>Dodaj atomy, a następnie kliknij „Sprawdź”. Gotowe modele wszystkich dostępnych substancji znajdziesz w słowniku.</p><div class="dictionary-search" id="dictionary-search-controls" hidden><label for="dictionary-search">Szukaj substancji</label><input class="search" id="dictionary-search" type="search" placeholder="Nazwa lub wzór" aria-controls="lesson-list" autocomplete="off"></div><p class="dictionary-empty" id="dictionary-empty" role="status" hidden>Brak pasujących substancji. Zmień nazwę lub wzór.</p><nav class="lesson-list" id="lesson-list" aria-label="Dostępne substancje"></nav><div class="lesson-info" id="lesson-info">01 &nbsp; Wybierz substancję<br>02 &nbsp; Przenieś odpowiednie atomy<br>03 &nbsp; Odkryj jej model i wzór</div></aside>
 <section class="card workbench" aria-label="Obszar projektu"><div class="bench-top"><div><div class="bench-label">Obszar projektu</div><div class="bench-title" id="bench-title"></div></div><button class="hint-button" id="hint" aria-pressed="false">Podpowiedź</button></div><div class="recipe" id="recipe"></div><div class="stage" id="stage" aria-label="Przeciągnij tutaj atomy"></div><div class="bench-bottom" id="bench-bottom"><div class="composition" id="composition"></div><button class="next" id="check" hidden>Sprawdź</button><button class="tool" id="undo" title="Cofnij ostatnią zmianę">↶ Cofnij</button><button class="tool" id="clear">Wyczyść</button></div><p id="notice" class="notice" role="status" aria-live="polite"></p></section>
 </div>
+<section class="card substance-filters" aria-labelledby="filters-heading"><h2 id="filters-heading">Rodzaje substancji</h2><p>Filtr wyznacza, które substancje pojawiają się w wyzwaniach i w słowniku.</p><div class="filter-options"><label class="toggle"><input id="filter-covalent" type="checkbox" checked> Substancje kowalencyjne (cząsteczkowe i sieciowe)</label><label class="toggle"><input id="filter-ionic" type="checkbox" checked> Związki jonowe</label></div></section>
 <section class="card table-card" id="table-card"><div class="table-heading"><div><h2>Twój zestaw pierwiastków</h2><p>Przeciągnij kafelek do projektu lub kliknij, aby dodać atom. Na telefonie dotknij kafelka.</p></div><div class="table-actions"><label class="table-color-control" for="table-coloring">Kolorowanie<select id="table-coloring" aria-describedby="periodic-color-note"><option value="families">Rodziny pierwiastków</option><option value="blocks">Bloki s, p, d, f</option><option value="metals">Metale / niemetale</option><option value="phase">Stan skupienia (20°C)</option><option value="radioactivity">Radioaktywność</option><option value="oxides">Charakter tlenków</option></select></label><label class="toggle"><input id="highlight" type="checkbox"> Wyróżnij przydatne</label><input class="search" id="search" type="search" placeholder="Szukaj: nazwa lub symbol" aria-label="Szukaj pierwiastka"></div></div><div class="periodic-scroll"><div class="periodic" id="periodic" aria-label="Układ okresowy pierwiastków"></div></div><div class="legend" id="periodic-legend" aria-label="Legenda kolorowania"></div><p class="table-color-note" id="periodic-color-note" aria-live="polite"></p><details class="periodic-data-notes"><summary>Dane pierwiastków i źródła</summary><p>Najedź na kafelek lub wybierz go klawiszem Tab, aby zobaczyć właściwości. Escape zamyka chmurkę. Kliknięcie lub Enter nadal dodaje atom do projektu.</p><p>Elektroujemność podano w skali Paulinga, temperatury w °C (przeliczone z K). Dane lokalne z <a href="https://pubchem.ncbi.nlm.nih.gov/periodic-table/" target="_blank" rel="noopener noreferrer">PubChem</a>, pobrane 18.10.2026; brak wartości jest oznaczony, nie zastępujemy go zerem. Wyjątki fazowe i konwencja bloków: <a href="https://periodic-table.rsc.org/" target="_blank" rel="noopener noreferrer">Royal Society of Chemistry</a>. Dla najcięższych pierwiastków stan makroskopowy pozostaje niepotwierdzony.</p><p>Przykłady charakteru tlenków: <a href="https://openstax.org/books/chemistry-2e/pages/18-9-occurrence-preparation-and-compounds-of-oxygen" target="_blank" rel="noopener noreferrer">OpenStax - tlen i tlenki</a>, <a href="https://openstax.org/books/chemistry-2e/pages/19-1-occurrence-preparation-and-properties-of-transition-metals-and-their-compounds" target="_blank" rel="noopener noreferrer">tlenki metali przejściowych</a> oraz <a href="https://openstax.org/books/chemistry-2e/pages/18-3-structure-and-general-properties-of-the-metalloids" target="_blank" rel="noopener noreferrer">półmetale</a>. Uzupełnienie: <a href="https://orca.cardiff.ac.uk/id/eprint/10315/" target="_blank" rel="noopener noreferrer">zasadowość tlenków lantanowców(III)</a> i <a href="https://pubs.rsc.org/en/content/articlehtml/2010/cp/c0cp00138d" target="_blank" rel="noopener noreferrer">amfoteryczny In₂O₃</a>. To zestawienie dydaktyczne wybranych tlenków, nie wszystkich związków pierwiastka. Klasyfikacja izotopów: <a href="https://periodic-table.rsc.org/element/61/promethium" target="_blank" rel="noopener noreferrer">RSC</a>. Wszystkie chmurki i podziały działają offline.</p></details><p class="help">Usuwanie: kliknij „×” przy symbolu pod projektem lub dwukrotnie kliknij atom. Z klawiatury: Tab → Enter dodaje, Delete usuwa zaznaczony atom. Układ okresowy można przewijać poziomo.</p></section>
+
 <footer><p>Model edukacyjny: dobierasz skład substancji, nie przeprowadzasz reakcji chemicznej. Rysunki Lewisa są schematami 2D. Podane kąty opisują geometrię przestrzenną; wartości idealne VSEPR są wyraźnie oznaczone. Modele kwasów pokazują cząsteczki przed dysocjacją.</p><span>118 pierwiastków · <span id="library-count"></span> substancji</span></footer>
-<details class="source-notes"><summary>O modelach i źródłach danych</summary><p>Wolne pary i ładunki opisano konwencją Lewisa. Wiązanie podwójne liczy się jako jeden obszar elektronowy w modelu VSEPR. Kąty oznaczone jako idealne nie są wynikami pomiarów. W cząsteczkach złożonych pokazano wybrane kąty. Rozmieszczenie kropek służy czytelności i nie przedstawia orbitali w przestrzeni. Rozmiary atomów korzystają z referencyjnych promieni kowalencyjnych dla wiązań pojedynczych (Pyykkö i Atsumi), obejmujących również wartości teoretyczne. W obrębie modelu proporcje są przybliżane trzema wielkościami; małe różnice mogą zostać pominięte. Te same referencje atomowe stosujemy do schematów jonów, więc rozmiary kół nie oznaczają promieni jonowych. Modele klatkowe są dodatkowo pomniejszone dla czytelności.</p><p>Źródła: <a href="https://openstax.org/books/chemistry-2e/pages/7-6-molecular-structure-and-polarity" target="_blank" rel="noopener noreferrer">OpenStax - geometria i VSEPR</a>; <a href="https://openstax.org/books/chemistry-2e/pages/7-4-formal-charges-and-resonance" target="_blank" rel="noopener noreferrer">OpenStax - ładunki i rezonans</a>; <a href="https://physics.nist.gov/PhysRefData/MolSpec/Triatomic/Html/appendix.html" target="_blank" rel="noopener noreferrer">NIST - geometria cząsteczek trójatomowych</a>; <a href="https://cccbdb.nist.gov/exp2x.asp?casno=7722841&amp;charge=0" target="_blank" rel="noopener noreferrer">NIST - H₂O₂</a>; <a href="https://www.chem.ucla.edu/~harding/IGOC/P/phosphoric_acid.html" target="_blank" rel="noopener noreferrer">UCLA - kwas fosforowy</a>. <a href="https://openstax.org/books/chemistry-2e/pages/7-3-lewis-symbols-and-structures" target="_blank" rel="noopener noreferrer">OpenStax - wzory Lewisa</a>; <a href="https://openstax.org/books/chemistry-atoms-first-2e/pages/5-4-molecular-orbital-theory" target="_blank" rel="noopener noreferrer">OpenStax - orbitale molekularne i tlen O₂</a>. <a href="https://openstax.org/books/chemistry-2e/pages/2-7-chemical-nomenclature" target="_blank" rel="noopener noreferrer">OpenStax - wzory kwasów, soli i wodorotlenków</a>; <a href="https://openstax.org/books/chemistry-2e/pages/18-8-occurrence-preparation-and-properties-of-phosphorus" target="_blank" rel="noopener noreferrer">OpenStax - tlenki fosforu</a>; <a href="https://openstax.org/books/chemistry-2e/pages/18-3-structure-and-general-properties-of-the-metalloids" target="_blank" rel="noopener noreferrer">OpenStax - związki boru i krzemu</a>. <a href="https://doi.org/10.1002/chem.200800987" target="_blank" rel="noopener noreferrer">Pyykkö i Atsumi - promienie kowalencyjne</a>; <a href="https://github.com/pkienzle/periodictable/blob/master/periodictable/covalent_radius.py" target="_blank" rel="noopener noreferrer">Tabela promieni w bibliotece periodictable</a>. <a href="https://openstax.org/books/chemistry-2e/pages/19-2-coordination-chemistry-of-transition-metals" target="_blank" rel="noopener noreferrer">OpenStax - kompleksy i koordynacja</a>; <a href="https://openstax.org/books/chemistry-2e/pages/19-1-occurrence-preparation-and-properties-of-transition-metals-and-their-compounds" target="_blank" rel="noopener noreferrer">OpenStax - związki metali przejściowych</a>. <a href="https://www.sciencedirect.com/science/article/pii/S0022024813004077" target="_blank" rel="noopener noreferrer">Struktura anhydrytu - koordynacja wapnia</a>. Linki są opcjonalne; aplikacja działa bez internetu.</p></details></main><div id="element-tooltip" class="element-tooltip" role="tooltip" hidden></div><div id="drag-ghost" aria-hidden="true"></div>
+<details class="source-notes"><summary>O modelach i źródłach danych</summary><p>Wolne pary i ładunki opisano konwencją Lewisa. Wiązanie podwójne liczy się jako jeden obszar elektronowy w modelu VSEPR. Kąty oznaczone jako idealne nie są wynikami pomiarów. W cząsteczkach złożonych pokazano wybrane kąty. Rozmieszczenie kropek służy czytelności i nie przedstawia orbitali w przestrzeni. Rozmiary atomów w cząsteczkach korzystają z referencyjnych promieni kowalencyjnych dla wiązań pojedynczych (Pyykkö i Atsumi), obejmujących również wartości teoretyczne. W obrębie modelu proporcje są przybliżane trzema wielkościami; małe różnice mogą zostać pominięte. W modelach jonowych jony proste mają rozmiary wg przybliżonych promieni jonowych (Shannon): kationy są mniejsze, a aniony większe od swoich atomów. Modele klatkowe są dodatkowo pomniejszone dla czytelności.</p><p>Źródła: <a href="https://openstax.org/books/chemistry-2e/pages/7-6-molecular-structure-and-polarity" target="_blank" rel="noopener noreferrer">OpenStax - geometria i VSEPR</a>; <a href="https://openstax.org/books/chemistry-2e/pages/7-4-formal-charges-and-resonance" target="_blank" rel="noopener noreferrer">OpenStax - ładunki i rezonans</a>; <a href="https://physics.nist.gov/PhysRefData/MolSpec/Triatomic/Html/appendix.html" target="_blank" rel="noopener noreferrer">NIST - geometria cząsteczek trójatomowych</a>; <a href="https://cccbdb.nist.gov/exp2x.asp?casno=7722841&amp;charge=0" target="_blank" rel="noopener noreferrer">NIST - H₂O₂</a>; <a href="https://www.chem.ucla.edu/~harding/IGOC/P/phosphoric_acid.html" target="_blank" rel="noopener noreferrer">UCLA - kwas fosforowy</a>. <a href="https://openstax.org/books/chemistry-2e/pages/7-3-lewis-symbols-and-structures" target="_blank" rel="noopener noreferrer">OpenStax - wzory Lewisa</a>; <a href="https://openstax.org/books/chemistry-atoms-first-2e/pages/5-4-molecular-orbital-theory" target="_blank" rel="noopener noreferrer">OpenStax - orbitale molekularne i tlen O₂</a>. <a href="https://openstax.org/books/chemistry-2e/pages/2-7-chemical-nomenclature" target="_blank" rel="noopener noreferrer">OpenStax - wzory kwasów, soli i wodorotlenków</a>; <a href="https://openstax.org/books/chemistry-2e/pages/18-8-occurrence-preparation-and-properties-of-phosphorus" target="_blank" rel="noopener noreferrer">OpenStax - tlenki fosforu</a>; <a href="https://openstax.org/books/chemistry-2e/pages/18-3-structure-and-general-properties-of-the-metalloids" target="_blank" rel="noopener noreferrer">OpenStax - związki boru i krzemu</a>. <a href="https://doi.org/10.1002/chem.200800987" target="_blank" rel="noopener noreferrer">Pyykkö i Atsumi - promienie kowalencyjne</a>; <a href="https://github.com/pkienzle/periodictable/blob/master/periodictable/covalent_radius.py" target="_blank" rel="noopener noreferrer">Tabela promieni w bibliotece periodictable</a>. <a href="https://openstax.org/books/chemistry-2e/pages/19-2-coordination-chemistry-of-transition-metals" target="_blank" rel="noopener noreferrer">OpenStax - kompleksy i koordynacja</a>; <a href="https://openstax.org/books/chemistry-2e/pages/19-1-occurrence-preparation-and-properties-of-transition-metals-and-their-compounds" target="_blank" rel="noopener noreferrer">OpenStax - związki metali przejściowych</a>. <a href="https://www.sciencedirect.com/science/article/pii/S0022024813004077" target="_blank" rel="noopener noreferrer">Struktura anhydrytu - koordynacja wapnia</a>. Linki są opcjonalne; aplikacja działa bez internetu.</p></details>
+</main><div id="element-tooltip" class="element-tooltip" role="tooltip" hidden></div><div id="drag-ghost" aria-hidden="true"></div>
 <!-- BIBLIOTEKA SUBSTANCJI - edytuj tę listę jako poprawny JSON (bez komentarzy wewnątrz).
      wzor: zapis zwykłymi cyframi, zamienianymi w interfejsie na indeksy dolne.
      atomy: symbol i wymagana liczba atomów. model: [symbol, x, y] na płótnie 600 × 360 (renderer dodaje 35 px marginesu od góry).
@@ -342,6 +345,21 @@ let challengeIndices=[], dictionarySelected=0;
 let completed=new Set();
 try{const saved=JSON.parse(localStorage.getItem('atom-po-atomie-v1')||'[]');if(Array.isArray(saved))completed=new Set(saved.filter(id=>SUBSTANCES.some(s=>s.id===id)));}catch(e){}
 try{const n=Number(localStorage.getItem('atom-po-atomie-challenge-count-v1'));if(Number.isInteger(n)&&n>=1&&n<=10)$('challenge-count').value=String(n);}catch(e){}
+const isIonic=s=>s.typ==='jonowy';
+try{const f=JSON.parse(localStorage.getItem('atom-po-atomie-filters-v1')||'null');if(f&&typeof f.covalent==='boolean'&&typeof f.ionic==='boolean'&&(f.covalent||f.ionic)){$('filter-covalent').checked=f.covalent;$('filter-ionic').checked=f.ionic;}}catch(e){}
+function allowedIndices(){const covalent=$('filter-covalent').checked,ionic=$('filter-ionic').checked;return SUBSTANCES.map((_,i)=>i).filter(i=>isIonic(SUBSTANCES[i])?ionic:covalent);}
+function onFilterChange(e){
+ if(!$('filter-covalent').checked&&!$('filter-ionic').checked)e.target.checked=true;
+ try{localStorage.setItem('atom-po-atomie-filters-v1',JSON.stringify({covalent:$('filter-covalent').checked,ionic:$('filter-ionic').checked}));}catch(err){}
+ const allowed=allowedIndices();
+ if(!allowed.includes(dictionarySelected))dictionarySelected=allowed[0];
+ if(mode==='task')randomChallenges();else evaluate();
+}
+// Promienie jonowe (pm, Shannon, wartości przybliżone) - jony nie mają rozmiarów swoich atomów.
+const ION_RADII_PM=Object.freeze({Li1:76,Na1:102,K1:138,Mg2:72,Ca2:100,Sr2:118,Ba2:135,Al3:54,Fe2:78,Fe3:65,Cu1:77,Cu2:73,Zn2:74,Ag1:115,Cr3:62,Mn2:83,Mn4:53,Co2:75,Ni2:69,'F-1':133,'Cl-1':181,'Br-1':196,'I-1':220,'O-2':140});
+const ionRadiusPm=(symbol,charge)=>ION_RADII_PM[symbol+charge];
+const ionLevel=(pm,charge)=>pm==null?(charge>0?1:2):pm<60?0:pm<=110?1:2;
+const covalentLevel=pm=>pm<50?0:pm<=90?1:2;
 function atomColor(s){return ATOM_COLORS[s]||[COLORS[category(s)],'#263d37'];}
 function atomSizes(symbols,maxRadius=ATOM_SIZE_RADII[2]){
  const unique=[...new Set(symbols)].sort((a,b)=>ATOM_REFERENCE_RADII_PM[a]-ATOM_REFERENCE_RADII_PM[b]||a.localeCompare(b));
@@ -365,11 +383,11 @@ function atomSizes(symbols,maxRadius=ATOM_SIZE_RADII[2]){
  return sizes;
 }
 function atomSizeLegend(s){
- const sizes=atomSizes(Object.keys(s.atomy));
- return `<div class="atom-size-key" aria-label="Wielkości atomów w modelu">${ATOM_SIZE_LABELS.map((label,level)=>{
+ const ionic=isIonic(s),sizes=ionic?ionicSizes(s):atomSizes(Object.keys(s.atomy)),label=symbol=>{const z=sizes[symbol];return z.kind==='jon'?`${esc(symbol)}<sup>${esc(chargeText(z.charge))}</sup>`:esc(symbol);};
+ return `<div class="atom-size-key" aria-label="${ionic?'Wielkości jonów i atomów':'Wielkości atomów'} w modelu">${ATOM_SIZE_LABELS.map((name,level)=>{
   const symbols=Object.keys(sizes).filter(symbol=>sizes[symbol].level===level);
-  return symbols.length?`<span><i style="--size:${ATOM_SIZE_RADII[level]/2}px" aria-hidden="true"></i>${label}: ${symbols.map(esc).join(', ')}</span>`:'';
- }).join('')}</div><p class="size-note">Rozmiary względne w tym modelu, uproszczone do trzech wielkości.</p>`;
+  return symbols.length?`<span><i style="--size:${ATOM_SIZE_RADII[level]/2}px" aria-hidden="true"></i>${name}: ${symbols.map(label).join(', ')}</span>`:'';
+ }).join('')}</div><p class="size-note">${ionic?'Jony mają inne rozmiary niż atomy: kationy są mniejsze od swoich atomów, aniony większe. Jony proste klasyfikujemy wg promieni jonowych (mały: poniżej 60 pm, średni: 60-110 pm, duży: powyżej 110 pm), a atomy wewnątrz jonów wieloatomowych wg promieni kowalencyjnych (mały: poniżej 50 pm, średni: 50-90 pm, duży: powyżej 90 pm).':'Rozmiary względne w tym modelu, uproszczone do trzech wielkości.'}</p>`;
 }
 function countAtoms(){return atoms.reduce((acc,a)=>(acc[a.s]=(acc[a.s]||0)+1,acc),{});}
 function matches(count,substance){return Object.keys(count).length===Object.keys(substance.atomy).length&&Object.entries(substance.atomy).every(([s,n])=>count[s]===n);}
@@ -378,12 +396,12 @@ function status(text,success=false){$('notice').textContent=text;$('notice').cla
 const normalizeSearch=s=>s.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/ł/gi,'l').toLowerCase().trim().replace(/\s+/g,' ');
 function renderList(){
  const query=mode==='dictionary'?normalizeSearch($('dictionary-search').value):'';
- const indices=mode==='task'?challengeIndices:SUBSTANCES.map((_,i)=>i).filter(i=>!query||normalizeSearch(SUBSTANCES[i].nazwa).includes(query)||normalizeSearch(SUBSTANCES[i].wzor).includes(query.replace(/\s/g,'')));
+ const indices=mode==='task'?challengeIndices:allowedIndices().filter(i=>!query||normalizeSearch(SUBSTANCES[i].nazwa).includes(query)||normalizeSearch(SUBSTANCES[i].wzor).includes(query.replace(/\s/g,'')));
  $('dictionary-empty').hidden=mode!=='dictionary'||indices.length>0;
  const active=mode==='dictionary'?dictionarySelected:selected;
  $('lesson-list').innerHTML=indices.map((i,position)=>{const s=SUBSTANCES[i],done=mode==='task'&&completed.has(s.id);return `<button class="lesson ${active===i?'active':''} ${done?'done':''}" data-index="${i}" aria-current="${active===i?(mode==='dictionary'?'true':'step'):'false'}"><span class="lesson-num">${done?'✓':String(position+1).padStart(2,'0')}</span><span><span class="lesson-name">${esc(s.nazwa)}</span><br><span class="lesson-sub">${Object.values(s.atomy).reduce((a,b)=>a+b,0)} atomów · ${({tlenki:'tlenek',wodorotlenki:'wodorotlenek',kwasy:'kwas',sole:'sól',kompleksy:'kompleks',pierwiastki:'substancja prosta'})[s.grupa]||'cząsteczka'} · ${s.typ==='jonowy'?'budowa jonowa':s.typ==='sieciowy'?'sieć':'model 2D'}</span></span></button>`;}).join('');
  const done=challengeIndices.filter(i=>completed.has(SUBSTANCES[i].id)).length;
- $('progress-label').textContent=mode==='task'?`${done} / ${challengeIndices.length}`:query?`${indices.length} / ${SUBSTANCES.length}`:`${SUBSTANCES.length}`;
+ $('progress-label').textContent=mode==='task'?`${done} / ${challengeIndices.length}`:query||indices.length<SUBSTANCES.length?`${indices.length} / ${SUBSTANCES.length}`:`${SUBSTANCES.length}`;
  $('progress-bar').style.width=100*done/challengeIndices.length+'%';
 }
 function renderRecipe(){
@@ -409,11 +427,18 @@ function ionicParts(s){
  if(s.skladnikiJonowe)return s.skladnikiJonowe.map(part=>({ion:IONS[part.jon],liczba:part.liczba}));
  return Object.entries(s.atomy).map(([symbol,liczba])=>{const label=s.jony[symbol],ladunek=(parseInt(label,10)||1)*(label.includes('+')?1:-1);return {liczba,ion:{nazwa:nameOf(symbol),wzor:symbol,atomy:{[symbol]:1},typ:'czasteczka',ladunek,model:[[symbol,0,0]],wiazania:[],ladunki:{0:ladunek},wolnePary:{0:s.wolneParyJonow?.[symbol]||[]},katy:[]}};});
 }
-function ionicSizes(s){return atomSizes(Object.keys(s.atomy),Math.min(ATOM_SIZE_RADII[2],...ionicParts(s).map(part=>part.ion.promienAtomu||ATOM_SIZE_RADII[2])));}
+function ionicSizes(s){
+ const parts=ionicParts(s),scale=Math.min(1,...parts.map(part=>(part.ion.promienAtomu||ATOM_SIZE_RADII[2])/ATOM_SIZE_RADII[2])),sizes={};
+ const add=(symbol,level,extra)=>{if(!sizes[symbol])sizes[symbol]={level,radius:ATOM_SIZE_RADII[level]*scale,...extra};};
+ for(const {ion} of parts)if(ion.model.length===1){const symbol=ion.model[0][0],pm=ionRadiusPm(symbol,ion.ladunek);add(symbol,ionLevel(pm,ion.ladunek),{kind:'jon',charge:ion.ladunek,pm});}
+ for(const {ion} of parts)for(const [symbol] of ion.model){const pm=ATOM_REFERENCE_RADII_PM[symbol];add(symbol,covalentLevel(pm),{kind:'atom',pm});}
+ return sizes;
+}
 function ionBounds(ion,sizes){
  const xs=ion.model.flatMap(([symbol,x])=>[x-sizes[symbol].radius-18,x+sizes[symbol].radius+18]),ys=ion.model.flatMap(([symbol,,y])=>[y-sizes[symbol].radius-18,y+sizes[symbol].radius+18]);
- // Labels reserve space, but must not move the visual center of the ion.
- const cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2;
+ const e=ionEllipse(ion,sizes);xs.push(e.cx-e.rx-2,e.cx+e.rx+2);ys.push(e.cy-e.ry-2,e.cy+e.ry+2);
+ // The ion center is the outline center; labels reserve space but must not move it.
+ const cx=e.cx,cy=e.cy;
  for(const a of (ion.katy||[]).filter(a=>a.rysuj!==false)){xs.push(a.etykieta[0]-40,a.etykieta[0]+40);ys.push(a.etykieta[1]-16,a.etykieta[1]+16);}
  const left=Math.min(...xs),right=Math.max(...xs),top=Math.min(...ys)-(ion.model.length>1?30:0),bottom=Math.max(...ys);
  return {cx,cy,hw:Math.max(cx-left,right-cx),hh:Math.max(cy-top,bottom-cy)};
@@ -431,11 +456,19 @@ function ionicLayout(s,sizes){
  const left=Math.min(...nodes.map(n=>n.x-n.hw))-20,top=Math.min(...nodes.map(n=>n.y-n.hh))-20,right=Math.max(...nodes.map(n=>n.x+n.hw))+20,bottom=Math.max(...nodes.map(n=>n.y+n.hh))+20;
  return {nodes,left,top,width:right-left,height:bottom-top};
 }
+function ionEllipse(ion,sizes){
+ // Smallest-aspect ellipse (circle for a single atom) centered on the ion that encloses every atom with padding.
+ const pad=16,rs=ion.model.map(([symbol])=>sizes[symbol].radius+pad),n=ion.model.length;
+ // Centered on the atoms' centroid so the structure sits in the middle of its outline.
+ const cx=ion.model.reduce((t,[,x])=>t+x,0)/n,cy=ion.model.reduce((t,[,,y])=>t+y,0)/n;
+ const a=Math.max(...ion.model.map(([,x],i)=>Math.abs(x-cx)+rs[i])),b=Math.max(...ion.model.map(([,,y],i)=>Math.abs(y-cy)+rs[i]));
+ let k=1;
+ ion.model.forEach(([,x,y],i)=>{for(let j=0;j<24;j++){const t=j*Math.PI/12,px=x+rs[i]*Math.cos(t)-cx,py=y+rs[i]*Math.sin(t)-cy;k=Math.max(k,Math.hypot(px/a,py/b));}});
+ return {cx,cy,rx:a*k,ry:b*k};
+}
 function ionOutline(ion,sizes){
- // A convex outline follows the atoms, rather than boxing each ion in a card.
- const points=ion.model.flatMap(([symbol,x,y])=>Array.from({length:16},(_,i)=>{const t=i*Math.PI/8,r=sizes[symbol].radius+16;return [x+r*Math.cos(t),y+r*Math.sin(t)];})).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
- const cross=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]),half=list=>{const hull=[];for(const p of list){while(hull.length>1&&cross(hull.at(-2),hull.at(-1),p)<=0)hull.pop();hull.push(p);}return hull.slice(0,-1);};
- return [...half(points),...half([...points].reverse())];
+ const {cx,cy,rx,ry}=ionEllipse(ion,sizes);
+ return Array.from({length:96},(_,i)=>{const t=i*Math.PI/48;return [cx+rx*Math.cos(t),cy+ry*Math.sin(t)];});
 }
 function ionEdge(n,ux,uy){
  // Intersect the center ray with the visible cloud, not the label's bounding box.
@@ -444,30 +477,21 @@ function ionEdge(n,ux,uy){
  return Math.max(0,...hits)+6;
 }
 function ionCloud(ion,sizes){
- const hull=ionOutline(ion,sizes),positive=ion.ladunek>0;
- return `<polygon class="ion-cloud" points="${hull.map(p=>p.join(',')).join(' ')}" fill="${positive?'#e8a94a':'#6ca6d2'}" fill-opacity=".1" stroke="${positive?'#c79c59':'#79a9bd'}" stroke-opacity=".55" stroke-width="1.5" stroke-linejoin="round"/>`;
-}
-function ionicWave(x1,y1,x2,y2){
- const dx=x2-x1,dy=y2-y1,length=Math.hypot(dx,dy);
- if(!length)return `M ${x1} ${y1}`;
- const ux=dx/length,uy=dy/length,steps=Math.max(2,Math.round(length/16)*2),step=length/steps,amplitude=Math.min(4,step/2);
- let path=`M ${x1} ${y1}`;
- for(let i=0;i<steps;i++){
-  const middle=(i+.5)*step,offset=(i%2?-1:1)*amplitude*2;
-  path+=` Q ${x1+ux*middle-uy*offset} ${y1+uy*middle+ux*offset} ${i===steps-1?x2:x1+ux*(i+1)*step} ${i===steps-1?y2:y1+uy*(i+1)*step}`;
- }
- return path;
+ const {cx,cy,rx,ry}=ionEllipse(ion,sizes),positive=ion.ladunek>0;
+ return `<ellipse class="ion-cloud" cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${positive?'#e8a94a':'#6ca6d2'}" fill-opacity=".1" stroke="${positive?'#c79c59':'#79a9bd'}" stroke-opacity=".55" stroke-width="1.5"/>`;
 }
 function drawIonicAssembly(s,sizes){
- const layout=ionicLayout(s,sizes),{nodes}=layout,pairs=[];
- nodes.forEach((a,i)=>nodes.slice(i+1).forEach((b,j)=>{if(a.ion.ladunek*b.ion.ladunek<0)pairs.push({i,j:i+j+1,d:Math.hypot(a.x-b.x,a.y-b.y)});}));
+ const layout=ionicLayout(s,sizes),{nodes}=layout,pairs=[],minD=nodes.map(()=>Infinity);
+ nodes.forEach((a,i)=>nodes.slice(i+1).forEach((b,j)=>{if(a.ion.ladunek*b.ion.ladunek<0){const d=Math.hypot(a.x-b.x,a.y-b.y);pairs.push({i,j:i+j+1,d});minD[i]=Math.min(minD[i],d);minD[i+j+1]=Math.min(minD[i+j+1],d);}}));
  const parents=nodes.map((_,i)=>i),root=i=>parents[i]===i?i:root(parents[i]);let links='';
- // Show a connected selection of attractions, not a claimed crystal coordination number.
- for(const {i,j} of pairs.sort((a,b)=>a.d-b.d)){
-  if(root(i)===root(j))continue;parents[root(i)]=root(j);
+ // Electrostatic attraction is non-directional: link each ion to its nearest counter-ions, then keep the picture connected.
+ const near=pairs.filter(p=>p.d<=minD[p.i]*1.15||p.d<=minD[p.j]*1.15),rest=pairs.filter(p=>!near.includes(p)).sort((a,b)=>a.d-b.d);
+ for(const {i,j} of near)parents[root(i)]=root(j);
+ const chosen=[...near,...rest.filter(({i,j})=>root(i)!==root(j)&&(parents[root(i)]=root(j),true))];
+ for(const {i,j} of chosen){
   const a=nodes[i],b=nodes[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),ux=dx/d,uy=dy/d;
   const ra=ionEdge(a,ux,uy),rb=ionEdge(b,-ux,-uy);
-  links+=`<path class="ionic-attraction" data-from="${i}" data-to="${j}" d="${ionicWave(a.x+ux*ra,a.y+uy*ra,b.x-ux*rb,b.y-uy*rb)}" stroke="#8c83aa" stroke-width="3" stroke-linecap="round" fill="none"><title>Przyciąganie elektrostatyczne między jonami o przeciwnych ładunkach</title></path>`;
+  links+=`<path class="ionic-attraction" data-from="${i}" data-to="${j}" d="M ${a.x+ux*ra} ${a.y+uy*ra} L ${b.x-ux*rb} ${b.y-uy*rb}" stroke="#8c83aa" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="0.1 8" fill="none"><title>Oddziaływanie elektrostatyczne (jonowe) między jonami o przeciwnych ładunkach; nie jest to wiązanie kowalencyjne</title></path>`;
  }
  const bodies=nodes.map((n,i)=>`<g class="assembly-ion" data-ion="${i}" data-charge="${n.ion.ladunek}" transform="translate(${n.x-n.cx} ${n.y-n.cy})"><title>${esc(n.ion.nazwa)}: ${esc(chargeText(n.ion.ladunek))}</title>${ionCloud(n.ion,sizes)}${drawMolecule({...n.ion,ion:true},sizes,true)}${n.ion.model.length>1?`<text class="ion-charge-label" x="${n.cx}" y="${n.cy-n.hh+18}" text-anchor="middle" font-size="19" font-weight="700" fill="#345d67">${esc(plainFormula(n.ion.wzor))}<tspan baseline-shift="super" font-size="13">${esc(chargeText(n.ion.ladunek))}</tspan></text>`:''}</g>`).join('');
  return `<div class="ionic-scene" tabindex="0" role="region" aria-label="Układ jonów; wąski ekran pozwala przewijać rysunek"><svg xmlns="http://www.w3.org/2000/svg" class="molecule ionic-assembly" style="min-width:${Math.max(360,Math.round(layout.width*.5))/2}px" viewBox="${layout.left} ${layout.top} ${layout.width} ${layout.height}" role="img" aria-label="Układ jonów: ${esc(s.nazwa)}"><title>${esc(s.nazwa)}: wszystkie jony z jednej jednostki wzoru ${esc(plainFormula(s.wzor))}</title><desc>Uproszczony układ pokazujący skład i wybrane oddziaływania. Rozmieszczenie nie odtwarza geometrii kryształu ani osobnej cząsteczki.</desc>${links}${bodies}</svg></div>`;
@@ -477,17 +501,23 @@ function modelKind(s){return hasCoordination(s)?'schemat koordynacyjny':s.typ===
 function coordinateBond(s,donor,metal,sizes){
  const p=s.model[donor],q=s.model[metal],length=Math.hypot(q[1]-p[1],q[2]-p[2]),ux=(q[1]-p[1])/length,uy=(q[2]-p[2])/length;
  const x1=p[1]+ux*(sizes[p[0]].radius+3),y1=p[2]+uy*(sizes[p[0]].radius+3),x2=q[1]-ux*(sizes[q[0]].radius+5),y2=q[2]-uy*(sizes[q[0]].radius+5);
- const bx=x2-ux*9,by=y2-uy*9;
- return `<g class="coordinate-bond" data-donor="${donor}" data-metal="${metal}"><title>Wiązanie koordynacyjne: ${esc(p[0])} → ${esc(q[0])}. Para elektronowa pochodzi od ligandu.</title><line x1="${x1}" y1="${y1}" x2="${bx}" y2="${by}" stroke="#287db0" stroke-width="3"/><polygon points="${x2},${y2} ${bx-uy*4},${by+ux*4} ${bx+uy*4},${by-ux*4}" fill="#287db0"/></g>`;
+ const bx=x2-ux*13,by=y2-uy*13;
+ return `<g class="coordinate-bond" data-donor="${donor}" data-metal="${metal}"><title>Wiązanie koordynacyjne (donorowo-akceptorowe): ${esc(p[0])} → ${esc(q[0])}. Oba elektrony wiązania pochodzą od ligandu.</title><line x1="${x1}" y1="${y1}" x2="${bx}" y2="${by}" stroke="#287db0" stroke-width="3"/><polygon points="${x2},${y2} ${bx-uy*6},${by+ux*6} ${bx+uy*6},${by-ux*6}" fill="#287db0"/></g>`;
+}
+function complexBrackets(s,sizes,withCharge){
+ const pad=14,xs=s.model.flatMap(([sym,x])=>[x-sizes[sym].radius-pad,x+sizes[sym].radius+pad]),ys=s.model.flatMap(([sym,,y])=>[y-sizes[sym].radius-pad,y+sizes[sym].radius+pad]);
+ const l=Math.min(...xs),r=Math.max(...xs),t=Math.min(...ys),b=Math.max(...ys),w=8;
+ return `<g class="complex-brackets"><title>Nawias kwadratowy obejmuje sferę koordynacyjną (jon kompleksowy)</title><path d="M ${l+w} ${t} H ${l} V ${b} H ${l+w} M ${r-w} ${t} H ${r} V ${b} H ${r-w}" fill="none" stroke="#4a5f7a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${withCharge&&s.ladunek?`<text x="${r+6}" y="${t+6}" font-size="20" font-weight="700" fill="#345d67">${esc(chargeText(s.ladunek))}</text>`:''}</g>`;
 }
 function drawMolecule(s,sizeContext=null,fragment=false){
  const sizes=sizeContext||atomSizes(Object.keys(s.atomy),s.promienAtomu||ATOM_SIZE_RADII[2]);
  if(s.typ==='jonowy')return drawIonicAssembly(s,ionicSizes(s));
  let content='';
- const node=(symbol,x,y,charge='')=>{const[bg,fg]=atomColor(symbol),{radius:r,level}=sizes[symbol],fontSize=Math.min(symbol.length>1?21:24,r*1.15);return `<g class="model-atom" data-symbol="${symbol}" data-size="${level}"><title>${esc(nameOf(symbol))}: ${ATOM_SIZE_LABELS[level]}; promień referencyjny ${ATOM_REFERENCE_RADII_PM[symbol]} pm</title><circle cx="${x}" cy="${y+3}" r="${r}" fill="#183e3215"/><circle cx="${x}" cy="${y}" r="${r}" fill="${bg}" stroke="#ffffff" stroke-width="2"/><text x="${x}" y="${y+fontSize*.3}" text-anchor="middle" fill="${fg}" font-size="${fontSize}" font-weight="700">${esc(symbol)}</text>${charge?`<text class="formal-charge" x="${x+r-5}" y="${y-r+5}" fill="#183e32" font-size="13" font-weight="800" stroke="#fff" stroke-width="3" paint-order="stroke">${esc(charge)}</text>`:''}</g>`;};
+ const node=(symbol,x,y,charge='')=>{const[bg,fg]=atomColor(symbol),{radius:r,level,kind,pm,charge:ionCharge}=sizes[symbol],fontSize=Math.min(symbol.length>1?21:24,r*1.15),tip=kind==='jon'&&pm?`jon ${nameOf(symbol)} (${chargeText(ionCharge)}): ${ATOM_SIZE_LABELS[level]}; promień jonowy ok. ${pm} pm`:`${nameOf(symbol)}: ${ATOM_SIZE_LABELS[level]}; promień referencyjny ${ATOM_REFERENCE_RADII_PM[symbol]} pm`;return `<g class="model-atom" data-symbol="${symbol}" data-size="${level}"><title>${esc(tip)}</title><circle cx="${x}" cy="${y+3}" r="${r}" fill="#183e3215"/><circle cx="${x}" cy="${y}" r="${r}" fill="${bg}" stroke="#ffffff" stroke-width="2"/><text x="${x}" y="${y+fontSize*.3}" text-anchor="middle" fill="${fg}" font-size="${fontSize}" font-weight="700">${esc(symbol)}</text>${charge?`<text class="formal-charge" x="${x+r-5}" y="${y-r+5}" fill="#183e32" font-size="13" font-weight="800" stroke="#fff" stroke-width="3" paint-order="stroke">${esc(charge)}</text>`:''}</g>`;};
  {
   for(const[a,b,order]of s.wiazania){const p=s.model[a],q=s.model[b],dx=q[1]-p[1],dy=q[2]-p[2],len=Math.hypot(dx,dy);for(let k=0;k<order;k++){const d=(k-(order-1)/2)*8,ox=-dy/len*d,oy=dx/len*d;content+=`<line x1="${p[1]+ox}" y1="${p[2]+oy}" x2="${q[1]+ox}" y2="${q[2]+oy}" stroke="#84988e" stroke-width="5" stroke-linecap="round"/>`;}}
   for(const [donor,metal] of s.koordynacyjne||[])content+=coordinateBond(s,donor,metal,sizes);
+  if(s.koordynacyjne?.length)content+=complexBrackets(s,sizes,!fragment);
   for(let i=0;i<s.model.length;i++){const[sym,x,y]=s.model[i],charge=s.ladunki?.[i]||0,chargeLabel=charge?`${Math.abs(charge)===1?'':Math.abs(charge)}${charge>0?'+':'−'}`:'';content+=node(sym,x,y,chargeLabel);if(showLonePairs){const radius=sizes[sym].radius+10;content+=electronPairs(x,y,s.wolnePary?.[i]||[],radius);content+=(s.niesparowane?.[i]||[]).map(deg=>`<circle class="unpaired-electron" cx="${x+radius*Math.cos(deg*Math.PI/180)}" cy="${y+radius*Math.sin(deg*Math.PI/180)}" r="3" fill="#315fb1"><title>Elektron niesparowany</title></circle>`).join('');}}
   if(showAngles)content+=(s.katy||[]).filter(a=>a.rysuj!==false).map(a=>angleDrawing(s,a)).join('');
  }
@@ -501,10 +531,10 @@ function drawMolecule(s,sizeContext=null,fragment=false){
 function modelDetails(s){
  const total=Object.values(s.wolnePary||{}).reduce((n,p)=>n+p.length,0),single=Object.values(s.niesparowane||{}).reduce((n,p)=>n+p.length,0),angles=modelAngles(s);
  const pairSummary=hasCoordination(s)?'Niebieska strzałka oznacza parę przekazaną przez ligand do wiązania z metalem. Nie pokazujemy jej ponownie jako wolnej pary. Pomijamy elektrony d metalu; nie jest to pełny wzór Lewisa centrum metalicznego. Ładunek całego kompleksu uwzględnia metal i wszystkie ligandy.':s.skladnikiJonowe?'Kreski łączą atomy wewnątrz jonów wieloatomowych. Między osobnymi jonami nie rysujemy wiązań cząsteczkowych. Kationy metali pokazano bez elektronów wewnętrznych.':s.typ==='jonowy'?'Przy każdym anionie: 4 pary elektronowe (8 elektronów).':`Wolne pary w cząsteczce: ${total}.${single?` Elektrony niesparowane: ${single}.`:''} Dwie kropki to para elektronów niewiążących; kreska to jedna para wiążąca.`;
- const legend=`<div class="model-key"><span><span class="electron-key">••</span> jedna wolna para elektronowa</span>${single?'<span>• elektron niesparowany</span>':''}${s.typ==='jonowy'?'<span class="ionic-key">∿ przyciąganie między jonami</span>':''}${hasCoordination(s)?'<span class="coordination-key">→ wiązanie koordynacyjne: ligand do metalu</span>':''}${showAngles&&angles.some(a=>a.rysuj!==false)?'<span class="angle-key">⌒ kąt między wiązaniami</span>':''}</div>`;
+ const legend=`<div class="model-key"><span><span class="electron-key">••</span> jedna wolna para elektronowa</span>${single?'<span>• elektron niesparowany</span>':''}${s.typ==='jonowy'?'<span class="ionic-key">⋯ oddziaływanie jonowe (przyciąganie elektrostatyczne)</span>':''}${hasCoordination(s)?'<span class="coordination-key">→ wiązanie koordynacyjne: od ligandu (donor) do metalu (akceptor)</span><span class="coordination-key">[ ] sfera koordynacyjna</span>':''}${showAngles&&angles.some(a=>a.rysuj!==false)?'<span class="angle-key">⌒ kąt między wiązaniami</span>':''}</div>`;
  return `<div class="geometry-info">
   <section class="model-info-section"><h3>Opis</h3><p class="result-note">${esc(s.opis||'')}</p></section>
-  <section class="model-info-section"><h3>Legenda</h3>${atomSizeLegend(s)}${s.typ!=='sieciowy'?legend:''}${s.typ==='jonowy'?`<p class="ionic-caption">Każdy jon pokazano osobno. Falowane linie oznaczają wybrane oddziaływania przyciągające.</p>`:''}</section>
+  <section class="model-info-section"><h3>Legenda</h3>${atomSizeLegend(s)}${s.typ!=='sieciowy'?legend:''}${s.typ==='jonowy'?`<p class="ionic-caption">Każdy jon pokazano osobno, z jego ładunkiem. Kropkowane linie to oddziaływanie elektrostatyczne między przeciwnie naładowanymi jonami: jest niekierunkowe i nie polega na uwspólnianiu elektronów, więc nie rysujemy go jako kreski wiązania. Pełne kreski występują tylko wewnątrz jonów wieloatomowych (wiązania kowalencyjne). Bilans ładunków: ${ionicParts(s).map(part=>`${part.liczba} × ${esc(plainFormula(part.ion.wzor))} (${esc(chargeText(part.ion.ladunek))})`).join(' + ')} = 0.</p>`:''}</section>
   <section class="model-info-section"><h3>Geometria</h3><p>${esc(s.geometria||'')}</p>${(s.skladnikiJonowe||[]).filter(part=>IONS[part.jon].geometria).map(part=>`<p class="ion-note"><b>${formula(IONS[part.jon].wzor)}:</b> ${esc(IONS[part.jon].geometria)}</p>`).join('')}${showLonePairs&&s.typ!=='sieciowy'?`<p class="pair-summary">${esc(pairSummary)}</p>`:''}${showAngles&&angles.length?`<div class="angle-list">${angles.map(a=>`<span class="angle-detail">${esc(a.opis)} <b>${esc(angleText(a))}</b><small>${esc(a.rodzaj)}</small></span>`).join('')}</div><p class="small muted">${angles.some(a=>a.rysuj!==false)?'Łuki wskazują wybrane wiązania. ':''}${angles.some(a=>a.rysuj===false)?'Kąty tetraedryczne podano tylko w opisie, bez łuku na płaskim schemacie. ':''}Wartości opisują geometrię w przestrzeni, nie pomiar rysunku 2D.</p>`:''}${angleAvailability(s)?`<p class="angle-availability">${esc(angleAvailability(s))}</p>`:''}</section>
  </div>`;
 }
@@ -515,7 +545,7 @@ function renderStage(){if(result){$('stage').innerHTML=`<div class="result"><div
 function renderComposition(){const c=countAtoms();$('composition').innerHTML=atoms.length?'<span class="small muted">Twój skład:</span>'+Object.entries(c).map(([s,n])=>`<button class="atom-chip" data-remove="${s}" title="Usuń jeden atom: ${nameOf(s)}" aria-label="Usuń jeden atom: ${nameOf(s)}">${s}${n>1?`<sub>${n}</sub>`:''}<span>×</span></button>`).join(''):'<span class="small muted">Jeszcze żadnych atomów</span>';$('undo').disabled=!history.length;$('clear').disabled=!atoms.length;$('check').disabled=!atoms.length;}
 function refresh(){renderList();renderRecipe();renderStage();renderComposition();highlightTable();}
 function evaluate(check=false){
- if(mode==='dictionary'){result=SUBSTANCES[dictionarySelected];status('Wybierz substancję z listy, aby zobaczyć jej skład i gotowy model.');refresh();return;}
+ if(mode==='dictionary'){const allowed=allowedIndices();if(!allowed.includes(dictionarySelected))dictionarySelected=allowed[0];result=SUBSTANCES[dictionarySelected];status('Wybierz substancję z listy, aby zobaczyć jej skład i gotowy model.');refresh();return;}
  if(mode==='free'&&!check){result=null;status(atoms.length?'Kliknij „Sprawdź”, aby sprawdzić zebrane atomy.':'Dodaj atomy, a następnie kliknij „Sprawdź”.');refresh();return;}
  const c=countAtoms();result=mode==='task'?(matches(c,SUBSTANCES[selected])?SUBSTANCES[selected]:null):SUBSTANCES.find(s=>matches(c,s))||null;
  if(result){
@@ -557,10 +587,10 @@ function randomChallenges(){
  const n=Number($('challenge-count').value);
  if(!Number.isInteger(n)||n<1||n>10)return;
  saveChallengeCount();
- const indices=SUBSTANCES.map((_,i)=>i);
+ const indices=allowedIndices(),count=Math.min(n,indices.length);
  for(let i=indices.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[indices[i],indices[j]]=[indices[j],indices[i]];}
- challengeIndices=indices.slice(0,n);choose(challengeIndices[0]);
- $('lesson-list').scrollTop=0;status(`Wylosowano wyzwania: ${n}. Wybierz atomy do pierwszego zadania.`);
+ challengeIndices=indices.slice(0,count);choose(challengeIndices[0]);
+ $('lesson-list').scrollTop=0;status(`Wylosowano wyzwania: ${count}. Wybierz atomy do pierwszego zadania.`);
 }
 function switchMode(m){if(m===mode)return;mode=m;atoms=[];history=[];if(mode==='task')resetTaskHints();setModeUI();evaluate();}
 function highlightTable(){const query=$('search').value.trim().toLocaleLowerCase('pl');const useful=mode==='task'?new Set(Object.keys(SUBSTANCES[selected].atomy)):new Set(SUBSTANCES.flatMap(s=>Object.keys(s.atomy)));for(const b of document.querySelectorAll('.element')){const s=b.dataset.symbol;const found=!query||s.toLowerCase().includes(query)||nameOf(s).includes(query);b.classList.toggle('dim',!found||(!query&&$('highlight').checked&&!useful.has(s)));b.classList.toggle('relevant',useful.has(s)&&$('highlight').checked&&found);}}
@@ -577,7 +607,7 @@ $('composition').addEventListener('click',e=>{const b=e.target.closest('[data-re
 $('lesson-list').addEventListener('click',e=>{const b=e.target.closest('[data-index]');if(b)choose(Number(b.dataset.index));});
 $('check').onclick=()=>evaluate(true);$('random-challenges').onclick=randomChallenges;$('dictionary-mode').onclick=()=>switchMode('dictionary');
 $('dictionary-search').oninput=()=>{renderList();$('lesson-list').scrollTop=0;};
-$('challenge-count').onchange=saveChallengeCount;
+$('challenge-count').onchange=saveChallengeCount;$('filter-covalent').onchange=$('filter-ionic').onchange=onFilterChange;
 $('clear').onclick=reset;$('undo').onclick=()=>{if(history.length){atoms=history.pop();evaluate();}};
 $('task-mode').onclick=()=>switchMode('task');$('free-mode').onclick=()=>switchMode('free');$('hint').onclick=()=>{hints=!hints;evaluate();};$('search').oninput=highlightTable;$('highlight').onchange=highlightTable;
 $('library-count').textContent=SUBSTANCES.length;setupPeriodicTable({isDragging:()=>drag?.moved,tileLabel:(name,s)=>`Dodaj ${name}, ${s}, liczba atomowa ${SYMBOLS.indexOf(s)+1}`});setModeUI();randomChallenges();

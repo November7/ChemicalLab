@@ -103,3 +103,4 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible,select:focus-v
 .hover-ring .track{stroke:#18365d22}
 .hover-ring .fill{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;animation:hover-ring var(--delay,1s) linear forwards}
 @keyframes hover-ring{to{stroke-dashoffset:0}}
+.substance-filters{margin-top:20px;padding:16px 23px}.substance-filters h2{margin:0 0 4px;font-size:16px}.substance-filters p{margin:0 0 10px;font-size:13px;color:var(--muted)}.filter-options{display:flex;flex-wrap:wrap;gap:8px 24px}.coordination-key+.coordination-key{margin-left:0}
