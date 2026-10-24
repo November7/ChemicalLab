@@ -9,12 +9,8 @@ Repozytorium zawiera zbiór interaktywnych symulacji chemicznych. Przykłady są
 
 README oraz symulacje w tym repozytorium są tworzone przy użyciu sztucznej inteligencji.
 
-Lista dostępnych symulacji znajduje się na [GitHub Pages](https://november7.github.io/ChemicalLab/)
-
 # English
 
 This repository is a collection of interactive chemistry simulations. The examples are built as HTML, CSS, and JavaScript pages that run in the browser, also offline. It currently includes the "Atom by atom" laboratory, where you can pick elements from the periodic table, build molecules from them, solve challenges, and explore the structure and geometry of the resulting substances.
 
 This README and the simulations in this repository are created using artificial intelligence.
-
-The list of available simulations is on the [GitHub Pages](https://november7.github.io/ChemicalLab/)
