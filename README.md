@@ -9,7 +9,7 @@
 
 **Polska wersja README jest wersją źródłową; wersja angielska jest jej tłumaczeniem.** Nie dotyczy to licencji: plik `LICENSE` zawiera oryginalny angielski tekst GNU GPL v3.
 
-ChemicalLab to zbiór pokazowych, interaktywnych wizualizacji chemicznych przygotowanych w HTML, CSS i JavaScript. Moduły działają w przeglądarce, także offline. Strona główna wczytująca ten README wymaga serwera HTTP lub GitHub Pages.
+ChemicalLab to zbiór pokazowych, interaktywnych wizualizacji chemicznych przygotowanych w HTML, CSS i JavaScript. Moduły działają w przeglądarce, także offline. Strona główna i laboratorium „Atom po atomie” wymagają serwera HTTP lub GitHub Pages.
 
 Projekt zawiera laboratorium „Atom po atomie” z losowanymi wyzwaniami, swobodnym dobieraniem atomów, słownikiem substancji i schematami ich budowy oraz samodzielny układ okresowy 118 pierwiastków z właściwościami i różnymi sposobami kolorowania. Interfejs jest w języku polskim. Postęp wyzwań i wybrane ustawienia są zapisywane lokalnie w przeglądarce (`localStorage`); projekt nie ma backendu ani kont użytkowników.
 
@@ -55,7 +55,7 @@ Projekt jest statyczną stroną i nie wymaga instalowania zależności ani kompi
 
 Na Windows możesz użyć `py` zamiast `python`, a na macOS i Linux — `python3`.
 
-Pliki `atoms.html` i `mendelejew.html` można też otworzyć bezpośrednio z dysku, zachowując `styles.css` i `mendelejew.js` w tym samym katalogu. Dane modeli i pierwiastków są zapisane lokalnie. Strona główna pobiera `README.md` i `simulations.json` przez `fetch`, dlatego wymaga serwera HTTP. Biblioteki strony głównej znajdują się w `vendor/`; zewnętrzne odznaki README oraz odnośniki do źródeł wymagają internetu.
+Plik `mendelejew.html` można też otworzyć bezpośrednio z dysku, zachowując `styles.css` i `mendelejew.js` w tym samym katalogu. Laboratorium `atoms.html` pobiera `substances.json` i `ions.json` przez `fetch`, dlatego wymaga serwera HTTP, podobnie jak strona główna pobierająca `README.md` i `simulations.json`. Wszystkie te dane są lokalne: z lokalnym serwerem aplikacja działa także bez dostępu do internetu. Biblioteki strony głównej znajdują się w `vendor/`; zewnętrzne odznaki README oraz odnośniki do źródeł wymagają internetu.
 
 ### Struktura projektu
 
@@ -64,7 +64,9 @@ ChemicalLab/
 ├── vendor/           # Lokalne kopie bibliotek zewnętrznych
 ├── simulations.json  # Katalog modułów wyświetlany na stronie głównej
 ├── index.html        # Strona główna, README i lista modułów
-├── atoms.html        # Laboratorium i biblioteka modeli substancji
+├── atoms.html        # Laboratorium i rysowanie modeli substancji
+├── substances.json   # Biblioteka modeli substancji
+├── ions.json         # Modele jonów i kompleksów
 ├── mendelejew.html   # Samodzielny widok układu okresowego
 ├── mendelejew.js     # Dane pierwiastków i wspólna obsługa układu okresowego
 ├── ...               # Kolejne pliki symulacji
@@ -111,7 +113,7 @@ Komponenty zewnętrzne w `vendor/` zachowują własne licencje i informacje o pr
 
 **The Polish README is the source version; the English version is its translation.** This does not apply to the license: `LICENSE` contains the original English text of GNU GPL v3.
 
-ChemicalLab is a collection of demonstration-only interactive chemistry visualizations built with HTML, CSS, and JavaScript. The modules run in a browser, including offline. The home page that loads this README requires an HTTP server or GitHub Pages.
+ChemicalLab is a collection of demonstration-only interactive chemistry visualizations built with HTML, CSS, and JavaScript. The modules run in a browser, including offline. The home page and the “Atom by atom” laboratory require an HTTP server or GitHub Pages.
 
 The project includes the “Atom by atom” laboratory with randomized challenges, free atom selection, a substance dictionary, and structure diagrams, as well as a standalone periodic table of 118 elements with properties and multiple coloring modes. The interface is in Polish. Challenge progress and selected settings are stored locally in the browser (`localStorage`); the project has no backend or user accounts.
 
@@ -157,7 +159,7 @@ The project is a static website and requires no dependency installation or build
 
 On Windows, you can use `py` instead of `python`; on macOS and Linux, use `python3`.
 
-You can also open `atoms.html` and `mendelejew.html` directly from disk, keeping `styles.css` and `mendelejew.js` in the same directory. Model and element data are stored locally. The home page loads `README.md` and `simulations.json` using `fetch`, so it requires an HTTP server. Home page libraries are stored in `vendor/`; external README badges and source links require internet access.
+You can also open `mendelejew.html` directly from disk, keeping `styles.css` and `mendelejew.js` in the same directory. The `atoms.html` laboratory loads `substances.json` and `ions.json` using `fetch`, so it requires an HTTP server, as does the home page loading `README.md` and `simulations.json`. All these data files are local: with a local server, the application also works without internet access. Home page libraries are stored in `vendor/`; external README badges and source links require internet access.
 
 ### Project structure
 
@@ -166,7 +168,9 @@ ChemicalLab/
 ├── vendor/           # Local copies of third-party libraries
 ├── simulations.json  # Module catalog displayed on the home page
 ├── index.html        # Home page, README, and module list
-├── atoms.html        # Laboratory and substance model library
+├── atoms.html        # Laboratory and substance model rendering
+├── substances.json   # Substance model library
+├── ions.json         # Ion and complex models
 ├── mendelejew.html   # Standalone periodic table view
 ├── mendelejew.js     # Element data and shared periodic table behavior
 ├── ...               # Additional simulation files
