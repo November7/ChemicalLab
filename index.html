@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="ChemicalLab - pokazowe, niezweryfikowane wizualizacje chemiczne tworzone z użyciem AI.">
     <title>ChemicalLab</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="vendor/github-markdown.min.css">
     <style>
       .index-page body { margin: 0; background: #fff; }
       @media (prefers-color-scheme: dark) { .index-page body { background: #0d1117; } }
       .index-page .page { box-sizing: border-box; max-width: 980px; margin: 0 auto; padding: 45px; }
       @media (max-width: 767px) { .index-page .page { padding: 15px; } }
-      .project-notice { margin-top: 24px; padding-top: 16px; border-top: 1px solid; font-size: 13px; }
     </style>
   </head>
   <body>
@@ -24,12 +24,11 @@
 		<section>
 			<div id="readme">Ładowanie…</div>			
 	  </section>
-      <footer class="project-notice" aria-label="Informacje o projekcie / Project information">
-        <p>Materiał pokazowy, niezweryfikowany. Nie jest materiałem edukacyjnym. Może zawierać błędy lub uproszczenia. <span lang="en">Unverified demonstration material. Not educational material. It may contain errors or simplifications.</span></p>
-        <p>Projekt tworzony z użyciem AI. <span lang="en">Created with AI assistance.</span> <a href="index.html#polski">O projekcie</a> / <a href="index.html#english" lang="en">About the project</a>.</p>
-        <p>Copyright (c) 2026 Marcin Kowalski. <a href="LICENSE" rel="license">GNU GPL v3 (GPL-3.0-only)</a>. <a href="vendor/README.md">Komponenty zewnętrzne / Third-party components</a>.</p>
-      </footer>
     </main>
+<footer class="project-notice" aria-label="Informacje o projekcie / Project information">
+  <p>Materiał pokazowy, niezweryfikowany. Nie jest materiałem edukacyjnym. Może zawierać błędy lub uproszczenia. | Unverified demonstration material. Not educational material. It may contain errors or simplifications. </p>
+  <p>Copyright (c) 2026 Marcin Kowalski. <a href="LICENSE" rel="license">GNU GPL v3</a>.</p>
+</footer>
     <script src="vendor/marked.min.js"></script>
     <script>
       const slug = text => text.trim().toLowerCase().replace(/\s+/g, '-');
