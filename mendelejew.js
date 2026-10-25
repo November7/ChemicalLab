@@ -1,3 +1,4 @@
+/* Copyright (c) 2026 Marcin Kowalski. SPDX-License-Identifier: GPL-3.0-only */
 'use strict';
 // Rysowanie układu okresowego (Mendelejewa) wspólne dla atoms.html i mendelejew.html.
 const ROWS = [
